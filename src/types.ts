@@ -10,4 +10,4 @@ export type SearchValue = {
   value: string[]
 }
 
-export type popoverType = 'filterList' | ''
+export type popoverType = 'filterList' | 'date' | 'select'

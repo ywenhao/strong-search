@@ -8,6 +8,7 @@
   align-items: center;
   column-gap: 4px;
   padding-left: 10px;
+  padding-right: 10px;
   width: 600px;
 
   .search-input {
@@ -16,6 +17,7 @@
     .el-input__wrapper {
       box-shadow: none;
       padding-left: 0;
+      padding-right: 0;
     }
 
     .el-input__prefix-inner {
@@ -39,14 +41,21 @@
     font-size: 12px;
     display: inline-flex;
     align-items: center;
-    white-space: nowrap;
-    width: min-content;
+    // width: min-content;
+    width: auto;
     padding: 0px 10px;
     background-color: #f2f4f7;
+    white-space: nowrap;
 
     .tag-prefix {
       color: rgba(0, 0, 0, 0.4);
       margin-right: 4px;
+    }
+
+    .tag-value {
+      flex: 1;
+      flex-basis: 0;
+      overflow: hidden;
     }
 
     .close-btn {
