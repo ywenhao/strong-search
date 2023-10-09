@@ -1,14 +1,11 @@
 <template>
-  <div class="tag-group">
-    <TagItem
-      v-for="(item, index) in modelValue"
-      :key="index"
-      :model-value="item"
-      @delete="handleDelete"
-      @click="$emit('click')"
-    />
-    <slot />
-  </div>
+  <TagItem
+    v-for="(item, index) in modelValue"
+    :key="index"
+    :model-value="item"
+    @delete="handleDelete"
+    @click="$emit('tag-click')"
+  />
 </template>
 
 <script setup lang="ts">
@@ -21,7 +18,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   'update:modelValue': [value: SearchValue[]]
-  click: []
+  'tag-click': []
 }>()
 
 function handleDelete(value: SearchValue) {

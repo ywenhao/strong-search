@@ -1,8 +1,8 @@
 <template>
-  <div class="tag-item" :class="{ input: inputVisible }" @click.stop="handleClick">
+  <div class="tag-item" :class="{ input: inputVisible }">
     <span class="tag-prefix" v-if="modelValue.name">{{ `${modelValue.name}:` }}</span>
     <span>{{ modelValue.value.join(' | ') }}</span>
-    <ElIcon class="close-btn" @click.stop="emit('delete', modelValue)">
+    <ElIcon class="close-btn" @click="emit('delete', modelValue)">
       <CircleCloseFilled />
     </ElIcon>
   </div>
@@ -21,12 +21,7 @@ defineProps<{
 const emit = defineEmits<{
   'update:modelValue': [value: SearchValue]
   delete: [value: SearchValue]
-  click: []
 }>()
 
 const inputVisible = ref(false)
-
-function handleClick() {
-  emit('click')
-}
 </script>

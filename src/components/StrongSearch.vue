@@ -1,6 +1,6 @@
 <template>
   <div ref="searchRef" @click="active = true" class="strong-search" :class="{ active }">
-    <TagGroup v-model="searchValue" />
+    <TagGroup v-model="searchValue" @tag-click="popoverShow = false" />
     <ElPopover
       :teleported="false"
       :show-arrow="false"
@@ -9,6 +9,7 @@
     >
       <template #reference>
         <ElInput
+          ref="inputRef"
           v-model="inputValue"
           class="search-input"
           :placeholder="placeholder"
@@ -29,9 +30,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { Search, CircleClose } from '@element-plus/icons-vue'
-import { ElIcon, ElInput, ElPopover } from 'element-plus'
+import { ElIcon, ElInput, ElPopover, type InputInstance } from 'element-plus'
 import TagGroup from './TagGroup.vue'
 import FilterList from './FilterList.vue'
 import type { FilterItem, SearchValue } from '@/types'
@@ -47,6 +48,13 @@ const emit = defineEmits<{
 
 const searchRef = ref<HTMLDivElement>()
 const filterListRef = ref<InstanceType<typeof FilterList>>()
+const inputRef = ref<InputInstance>()
+
+onMounted(() => {
+  setTimeout(() => {
+    console.log(document.activeElement)
+  }, 1000)
+})
 
 const active = ref(false)
 
@@ -110,8 +118,13 @@ function handleClear() {
 
 function handleInputKeyDown(e: KeyboardEvent | Event) {
   const event = e as KeyboardEvent
-  if (prefix.value && event.key === 'Backspace') {
-    prefix.value = ''
+
+  // 删除
+  if (event.key === 'Backspace' && !inputValue.value) {
+    if (prefix.value) prefix.value = ''
+    else if (searchValue.value.length) {
+      searchValue.value.splice(searchValue.value.length - 1, 1)
+    }
   }
 
   // filter列表上下
@@ -124,9 +137,9 @@ function handleInputKeyDown(e: KeyboardEvent | Event) {
   // 确认
   const val = inputValue.value.trim()
   if (
+    val &&
     !popoverVisible.value &&
     props.filterList.length &&
-    val &&
     event.key === 'Enter' &&
     !activeFilterItem.value?.popover
   ) {

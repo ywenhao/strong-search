@@ -9,3 +9,5 @@ export type SearchValue = {
   type: string
   value: string[]
 }
+
+export type popoverType = 'filterList' | ''

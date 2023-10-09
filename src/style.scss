@@ -2,12 +2,20 @@
   border: 1px solid;
   border-color: var(--el-border-color);
   border-radius: 2px;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 4px;
+  padding-left: 10px;
+  width: 600px;
 
   .search-input {
-    width: 600px;
-
+    flex: 1;
+    min-width: 400px;
     .el-input__wrapper {
       box-shadow: none;
+      padding-left: 0;
     }
 
     .el-input__prefix-inner {
@@ -26,36 +34,28 @@
     }
   }
 
-  .tag-group {
+  .tag-item {
+    margin: 4px 0;
     font-size: 12px;
-    margin-top: 0;
-    vertical-align: top;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    width: min-content;
+    padding: 0px 10px;
+    background-color: #f2f4f7;
 
-    .tag-item {
-      display: inline-flex;
-      align-items: center;
-      margin: 4px;
-      margin-bottom: 0;
-      white-space: nowrap;
-      width: min-content;
-      padding: 0px 10px;
-      background-color: #f2f4f7;
-      cursor: text;
+    .tag-prefix {
+      color: rgba(0, 0, 0, 0.4);
+      margin-right: 4px;
+    }
 
-      .tag-prefix {
-        color: rgba(0, 0, 0, 0.4);
-        margin-right: 4px;
-      }
-
-      .close-btn {
-        color: rgba(0, 0, 0, 0.4);
-        font-size: 15px;
-        cursor: pointer;
-        margin-left: 4px;
-        &:hover {
-          color: rgba(0, 0, 0, 0.8);
-        }
+    .close-btn {
+      color: rgba(0, 0, 0, 0.4);
+      font-size: 15px;
+      cursor: pointer;
+      margin-left: 4px;
+      &:hover {
+        color: rgba(0, 0, 0, 0.8);
       }
     }
   }
