@@ -41,7 +41,7 @@
     font-size: 12px;
     display: inline-flex;
     align-items: center;
-    // width: min-content;
+    max-width: 100%;
     width: auto;
     padding: 0px 10px;
     background-color: #f2f4f7;
@@ -53,9 +53,9 @@
     }
 
     .tag-value {
-      flex: 1;
-      flex-basis: 0;
       overflow: hidden;
+      text-overflow: ellipsis;
+      word-break: break-all;
     }
 
     .close-btn {
