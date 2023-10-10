@@ -1,15 +1,26 @@
+$rowHeight: 32px;
+$maxHeight: $rowHeight * 3;
+
 .strong-search {
   border: 1px solid;
   border-color: var(--el-border-color);
   border-radius: 2px;
-  display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  align-items: center;
-  column-gap: 4px;
-  padding-left: 10px;
-  padding-right: 10px;
   width: 600px;
+  max-height: $maxHeight;
+
+  .search-scrollbar {
+    position: relative;
+    overflow: visible;
+    .el-scrollbar__view {
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      align-items: center;
+      column-gap: 4px;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }
 
   .search-input {
     flex: 1;

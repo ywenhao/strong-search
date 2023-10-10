@@ -1,38 +1,47 @@
 <template>
   <div ref="searchRef" @click="active = true" class="strong-search" :class="{ active }">
-    <TagGroup v-model="searchValue" @tag-click="popoverShow = false" />
-    <ElPopover
-      :teleported="false"
-      :show-arrow="false"
-      :visible="popoverVisible"
-      placement="bottom-start"
-    >
-      <template #reference>
-        <ElInput
-          ref="inputRef"
-          v-model="inputValue"
-          class="search-input"
-          :placeholder="placeholder"
-          @click="handleInputClick"
-          @keydown="handleInputKeyDown"
-        >
-          <template #prefix v-if="prefix">{{ prefix }}:</template>
-          <template #suffix>
-            <ElIcon v-if="closeBtnVisible" @click="handleClear"><CircleClose /></ElIcon>
-            <ElIcon @click="handleSearch"><Search /></ElIcon>
-          </template>
-        </ElInput>
-      </template>
+    <ElScrollbar ref="scrollbarRef" class="search-scrollbar">
+      <TagGroup v-model="searchValue" @tag-click="popoverShow = false" />
+      <ElPopover
+        :teleported="false"
+        :show-arrow="false"
+        :visible="popoverVisible"
+        placement="bottom-start"
+      >
+        <template #reference>
+          <ElInput
+            ref="inputRef"
+            v-model="inputValue"
+            class="search-input"
+            :placeholder="placeholder"
+            @click="handleInputClick"
+            @keydown="handleInputKeyDown"
+          >
+            <template #prefix v-if="prefix">{{ prefix }}:</template>
+            <template #suffix>
+              <ElIcon v-if="closeBtnVisible" @click="handleClear"><CircleClose /></ElIcon>
+              <ElIcon @click="handleSearch"><Search /></ElIcon>
+            </template>
+          </ElInput>
+        </template>
 
-      <FilterList ref="filterListRef" @click="handleFilterClick" :options="filterOptions" />
-    </ElPopover>
+        <FilterList ref="filterListRef" @click="handleFilterClick" :options="filterOptions" />
+      </ElPopover>
+    </ElScrollbar>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { Search, CircleClose } from '@element-plus/icons-vue'
-import { ElIcon, ElInput, ElPopover, type InputInstance } from 'element-plus'
+import {
+  ElScrollbar,
+  ElIcon,
+  ElInput,
+  ElPopover,
+  type InputInstance,
+  type ScrollbarInstance
+} from 'element-plus'
 import TagGroup from './TagGroup.vue'
 import FilterList from './FilterList.vue'
 import type { FilterItem, SearchValue } from '@/types'
@@ -47,14 +56,9 @@ const emit = defineEmits<{
 }>()
 
 const searchRef = ref<HTMLDivElement>()
-const filterListRef = ref<InstanceType<typeof FilterList>>()
 const inputRef = ref<InputInstance>()
-
-onMounted(() => {
-  setTimeout(() => {
-    console.log(document.activeElement)
-  }, 1000)
-})
+const scrollbarRef = ref<ScrollbarInstance>()
+const filterListRef = ref<InstanceType<typeof FilterList>>()
 
 const active = ref(false)
 
@@ -154,7 +158,15 @@ function handleInputKeyDown(e: KeyboardEvent | Event) {
     inputValue.value = ''
 
     handleSearch()
+
+    nextTick(() => setScrollBottom())
   }
+}
+
+function setScrollBottom() {
+  const warpRef = scrollbarRef.value?.wrapRef!
+  const val = warpRef.scrollHeight - warpRef.clientHeight
+  val && scrollbarRef.value?.setScrollTop(val)
 }
 
 function handleInputClick() {
