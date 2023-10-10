@@ -3,6 +3,7 @@ import type { FilterItem } from '@/types'
 export const filterList = [
   {
     name: '域名',
+    popover: 'date',
     type: 'domain'
   },
   {
@@ -11,7 +12,6 @@ export const filterList = [
   },
   {
     name: '标签',
-    popover: true,
     type: 'tag'
   },
   {

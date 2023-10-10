@@ -25,7 +25,13 @@
           </ElInput>
         </template>
 
-        <FilterList ref="filterListRef" @click="handleFilterClick" :options="filterOptions" />
+        <FilterList
+          ref="filterListRef"
+          v-if="popoverType === 'filterList'"
+          @click="handleFilterClick"
+          :options="filterOptions"
+        />
+        <SearchSelect />
       </ElPopover>
     </ElScrollbar>
   </div>
@@ -42,10 +48,11 @@ import {
   type InputInstance,
   type ScrollbarInstance
 } from 'element-plus'
-import TagGroup from './TagGroup.vue'
-import FilterList from './FilterList.vue'
-import type { FilterItem, SearchValue } from '@/types'
+import TagGroup from './tag/TagGroup.vue'
+import FilterList from './popover/FilterList.vue'
+import type { FilterItem, PopoverType, SearchValue } from '@/types'
 import { useDomIsContainsClick } from '@/hooks/useDomIsContains'
+import SearchSelect from './popover/SearchSelect.vue'
 
 const props = defineProps<{
   filterList: FilterItem[]
@@ -68,6 +75,9 @@ const activeFilterItem = computed(() => props.filterList.find((v) => v.name === 
 
 // 默认列表第一个type
 const type = computed(() => activeFilterItem.value?.type)
+const popoverType = computed<PopoverType | null>(() =>
+  !prefix.value ? 'filterList' : activeFilterItem.value?.popover || null
+)
 const inputValue = ref('')
 const searchValue = ref<SearchValue[]>([])
 
