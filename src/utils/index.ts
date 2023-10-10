@@ -32,8 +32,9 @@ export const filterList = [
     }
   },
   {
-    name: '标签键',
-    type: 'tag-key'
+    name: '创建时间',
+    popover: 'date',
+    type: 'create-date'
   },
   {
     name: '所属项目',

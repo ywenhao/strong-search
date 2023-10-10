@@ -1,7 +1,7 @@
 <template>
-  <div class="tag-item" :class="{ input: inputVisible }">
+  <div class="tag-item">
     <span class="tag-prefix" v-if="modelValue.name">{{ `${modelValue.name}:` }}</span>
-    <span class="tag-value">{{ modelValue.value.join(',') }}</span>
+    <span class="tag-value">{{ value }}</span>
     <ElIcon class="close-btn" @click="emit('delete', modelValue)">
       <CircleCloseFilled />
     </ElIcon>
@@ -9,12 +9,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed } from 'vue'
 import type { SearchValue } from '@/types'
-import { ElIcon } from 'element-plus'
+import { ElIcon, dayjs } from 'element-plus'
 import { CircleCloseFilled } from '@element-plus/icons-vue'
 
-defineProps<{
+const props = defineProps<{
   modelValue: SearchValue
 }>()
 
@@ -23,5 +23,14 @@ const emit = defineEmits<{
   delete: [value: SearchValue]
 }>()
 
-const inputVisible = ref(false)
+const value = computed(() => {
+  const isDate = props.modelValue.isDate
+  if (isDate) {
+    const val = props.modelValue.value.map((v) => (v ? dayjs.unix(+v).format('YYYY/MM/DD') : v))
+    if (val.filter(Boolean).length > 1) return val.join('-')
+    if (val[0]) return `≥${val[0]}`
+    if (val[1]) return `≤${val[1]}`
+  }
+  return props.modelValue.value.join(',')
+})
 </script>

@@ -19,8 +19,8 @@
       >
     </ElCheckboxGroup>
     <div class="search-popover-footer">
-      <ElButton @click="emit('cancel')" size="small">取消</ElButton>
-      <ElButton @click="emit('ok', items)" type="primary" size="small" :disabled="!items.length"
+      <ElButton @click="handleCancel" size="small">取消</ElButton>
+      <ElButton @click="handleOk" type="primary" size="small" :disabled="!items.length"
         >确定</ElButton
       >
     </div>
@@ -54,9 +54,7 @@ const item = ref<Value[]>([])
 const items = computed(() => props.options.filter((v) => item.value.includes(v.value)))
 
 watchEffect(() => {
-  active.value = actives.value[0]
-  checkAll.value = false
-  item.value = []
+  onClear()
 })
 
 const handleCheckAllChange = (val: boolean) => {
@@ -65,6 +63,22 @@ const handleCheckAllChange = (val: boolean) => {
 
 function handleChange(value: Value[]) {
   checkAll.value = value.length === props.options.length
+}
+
+function onClear() {
+  active.value = actives.value[0]
+  checkAll.value = false
+  item.value = []
+}
+
+function handleCancel() {
+  emit('cancel')
+  onClear()
+}
+
+function handleOk() {
+  emit('ok', items.value)
+  onClear()
 }
 
 const { activeUp, activeDown } = useActive(active, actives)

@@ -139,6 +139,31 @@ $maxHeight: $rowHeight * 3;
     }
   }
 
+  .search-date {
+    .date-title {
+      color: #8a8e99;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .tip-title {
+      font-size: 13px;
+      margin-bottom: 2px;
+    }
+
+    .date-content {
+      margin-top: 2px;
+      .date-start,
+      .date-end {
+        margin-bottom: 6px;
+      }
+
+      .el-date-editor {
+        width: 100%;
+        display: block;
+      }
+    }
+  }
+
   .search-popover-footer {
     padding-top: 8px;
     border-top: 1px solid var(--el-border-color);

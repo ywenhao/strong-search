@@ -46,13 +46,20 @@
           :options="checkOptions"
           v-else-if="popoverType === 'check'"
         />
+        <SearchDate
+          @ok="handleDateOk"
+          @cancel="handleDateCancel"
+          v-else-if="popoverType === 'date'"
+          :star-disabled-date="dateProps.starDisabledDate"
+          :end-disabled-date="dateProps.endDisabledDate"
+        />
       </ElPopover>
     </ElScrollbar>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch, watchEffect } from 'vue'
 import { Search, CircleClose } from '@element-plus/icons-vue'
 import {
   ElScrollbar,
@@ -65,9 +72,9 @@ import {
 import TagGroup from './tag/TagGroup.vue'
 import FilterList from './popover/FilterList.vue'
 import type { FilterItem, LabelValue, PopoverType, SearchValue } from '@/types'
-import { useDomIsContainsClick } from '@/hooks/useDomIsContains'
 import SearchSelect from './popover/SearchSelect.vue'
 import SearchCheck from './popover/SearchCheck.vue'
+import SearchDate from './popover/SearchDate.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -127,6 +134,8 @@ const checkOptions = computed(() => {
   const list = activeFilterItem.value?.popoverOption?.check || []
   return list.filter((v) => (val ? v.label.includes(val) : true))
 })
+
+const dateProps = computed(() => activeFilterItem.value?.popoverOption?.dateProps || {})
 
 const placeholder = computed(() => (prefix.value ? props.filterPlaceholder : props.placeholder))
 const closeBtnVisible = computed(
@@ -220,14 +229,24 @@ function handleInputFocus() {
   popoverShow.value = true
 }
 
+const noClosePopover = ref(false)
+
+watchEffect(() => {
+  if (popoverType.value === 'date' && popoverVisible.value === true) {
+    noClosePopover.value = true
+  }
+})
+
 function handleInputBlur() {
+  if (noClosePopover.value) return
   active.value = false
   popoverShow.value = false
 }
 
-function setSearchValue(value: string | string[]) {
+function setSearchValue(value: string | string[], isDate?: boolean) {
   const firstItem = props.filterList.at(0)!
   searchValue.value.push({
+    isDate,
     name: prefix.value || firstItem.name,
     type: type.value || firstItem.type,
     value: Array.isArray(value) ? value : [value]
@@ -262,6 +281,22 @@ function handleCheckOk(items: LabelValue[]) {
 }
 
 function handleCheckCancel() {
+  prefix.value = ''
+  inputValue.value = ''
+  popoverNextTick()
+}
+
+function handleDateOk(value: number[]) {
+  noClosePopover.value = false
+  const val = value.map((v) => (v ? String(v) : ''))
+  setSearchValue(val, true)
+  prefix.value = ''
+  inputValue.value = ''
+  popoverNextTick()
+}
+
+function handleDateCancel() {
+  noClosePopover.value = false
   prefix.value = ''
   inputValue.value = ''
   popoverNextTick()

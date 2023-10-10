@@ -1,5 +1,3 @@
-import type { DatePickerProps } from 'element-plus'
-
 export type PopoverType = 'filterList' | 'date' | 'select' | 'check'
 export type FilterPopover = Exclude<PopoverType, 'filterList'>
 
@@ -11,7 +9,10 @@ export type LabelValue = {
 export type PopoverOption = {
   select?: LabelValue[]
   check?: LabelValue[]
-  dateProps?: DatePickerProps
+  dateProps?: {
+    starDisabledDate?: Function
+    endDisabledDate?: Function
+  }
 }
 
 export type FilterItem = {
@@ -24,5 +25,6 @@ export type FilterItem = {
 export type SearchValue = {
   name: string
   type: string
+  isDate?: boolean
   value: string[]
 }
