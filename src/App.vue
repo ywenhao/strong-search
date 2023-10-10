@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import StrongSearch from './components/StrongSearch.vue'
-import type { SearchValue } from './types'
-import { filterList } from './utils'
+import StrongSearch from './components/strong-search/StrongSearch.vue'
+import type { SearchValue } from './components/strong-search/types'
+import { filterList } from './components/strong-search/utils'
 
 function handleSearch(item: SearchValue[]) {
   console.log(item)

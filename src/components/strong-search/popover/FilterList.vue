@@ -17,8 +17,8 @@
 </template>
 
 <script setup lang="ts">
-import { useActive } from '@/hooks/useActive'
-import type { FilterItem } from '@/types'
+import { useActive } from '../hooks/useActive'
+import type { FilterItem } from '../types'
 import { ref, toRef, watchEffect } from 'vue'
 
 const props = defineProps<{

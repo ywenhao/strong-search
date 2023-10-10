@@ -28,8 +28,8 @@
 </template>
 
 <script setup lang="ts">
-import { useActive } from '@/hooks/useActive'
-import type { LabelValue } from '@/types'
+import { useActive } from '../hooks/useActive'
+import type { LabelValue } from '../types'
 import { ElButton, ElCheckbox, ElCheckboxGroup } from 'element-plus'
 import { computed, ref, watchEffect } from 'vue'
 

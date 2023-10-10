@@ -14,8 +14,8 @@
 </template>
 
 <script setup lang="ts">
-import { useActive } from '@/hooks/useActive'
-import type { LabelValue } from '@/types'
+import { useActive } from '../hooks/useActive'
+import type { LabelValue } from '../types'
 import { ref, toRef, watchEffect } from 'vue'
 
 const props = defineProps<{

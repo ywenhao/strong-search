@@ -71,7 +71,7 @@ import {
 } from 'element-plus'
 import TagGroup from './tag/TagGroup.vue'
 import FilterList from './popover/FilterList.vue'
-import type { FilterItem, LabelValue, PopoverType, SearchValue } from '@/types'
+import type { FilterItem, LabelValue, PopoverType, SearchValue } from './types'
 import SearchSelect from './popover/SearchSelect.vue'
 import SearchCheck from './popover/SearchCheck.vue'
 import SearchDate from './popover/SearchDate.vue'
@@ -308,5 +308,5 @@ function handleSearch() {
 </script>
 
 <style lang="scss">
-@import '../style.scss';
+@import './style.scss';
 </style>

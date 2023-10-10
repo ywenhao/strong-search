@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import type { SearchValue } from '@/types'
+import type { SearchValue } from '../types'
 import TagItem from './TagItem.vue'
 
 const props = defineProps<{

@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { SearchValue } from '@/types'
+import type { SearchValue } from '../types'
 import { ElIcon, dayjs } from 'element-plus'
 import { CircleCloseFilled } from '@element-plus/icons-vue'
 
