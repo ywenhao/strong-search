@@ -1,7 +1,7 @@
 <template>
   <div class="tag-item" :class="{ input: inputVisible }">
     <span class="tag-prefix" v-if="modelValue.name">{{ `${modelValue.name}:` }}</span>
-    <span class="tag-value">{{ modelValue.value.join(' | ') }}</span>
+    <span class="tag-value">{{ modelValue.value.join(',') }}</span>
     <ElIcon class="close-btn" @click="emit('delete', modelValue)">
       <CircleCloseFilled />
     </ElIcon>

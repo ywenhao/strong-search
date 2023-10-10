@@ -93,15 +93,30 @@ $maxHeight: $rowHeight * 3;
   }
 }
 
-.filter-list {
-  .filter-title {
-    color: #8a8e99;
-    font-weight: 700;
+.search-popover {
+  .filter-list {
+    .filter-title {
+      color: #8a8e99;
+      font-weight: 700;
+    }
+
+    .filter-content {
+      font-size: 12px;
+      .filter-item {
+        cursor: pointer;
+        padding: 6px 12px;
+        padding-right: 0;
+        &.active {
+          color: #409eff;
+          background-color: #f2f5fc;
+        }
+      }
+    }
   }
 
-  .filter-content {
+  .search-select {
     font-size: 12px;
-    .filter-item {
+    .search-option {
       cursor: pointer;
       padding: 6px 12px;
       padding-right: 0;
@@ -110,5 +125,23 @@ $maxHeight: $rowHeight * 3;
         background-color: #f2f5fc;
       }
     }
+  }
+
+  .search-check {
+    .el-checkbox {
+      padding-left: 2px;
+      display: flex;
+      margin-right: 0;
+      &.active {
+        color: #409eff;
+        background-color: #f2f5fc;
+      }
+    }
+  }
+
+  .search-popover-footer {
+    padding-top: 8px;
+    border-top: 1px solid var(--el-border-color);
+    text-align: center;
   }
 }

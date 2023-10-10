@@ -1,5 +1,5 @@
 <template>
-  <div ref="searchRef" @click="active = true" class="strong-search" :class="{ active }">
+  <div ref="searchRef" class="strong-search" :class="{ active }">
     <ElScrollbar ref="scrollbarRef" class="search-scrollbar">
       <TagGroup v-model="searchValue" @tag-click="popoverShow = false" />
       <ElPopover
@@ -7,6 +7,7 @@
         :show-arrow="false"
         :visible="popoverVisible"
         placement="bottom-start"
+        popper-class="search-popover"
       >
         <template #reference>
           <ElInput
@@ -14,7 +15,8 @@
             v-model="inputValue"
             class="search-input"
             :placeholder="placeholder"
-            @click="handleInputClick"
+            @focus="handleInputFocus"
+            @blur="handleInputBlur"
             @keydown="handleInputKeyDown"
           >
             <template #prefix v-if="prefix">{{ prefix }}:</template>
@@ -31,7 +33,19 @@
           @click="handleFilterClick"
           :options="filterOptions"
         />
-        <SearchSelect />
+        <SearchSelect
+          ref="selectRef"
+          @click="handleSelectClick"
+          :options="selectOptions"
+          v-else-if="popoverType === 'select'"
+        />
+        <SearchCheck
+          ref="checkRef"
+          @ok="handleCheckOk"
+          @cancel="handleCheckCancel"
+          :options="checkOptions"
+          v-else-if="popoverType === 'check'"
+        />
       </ElPopover>
     </ElScrollbar>
   </div>
@@ -50,13 +64,22 @@ import {
 } from 'element-plus'
 import TagGroup from './tag/TagGroup.vue'
 import FilterList from './popover/FilterList.vue'
-import type { FilterItem, PopoverType, SearchValue } from '@/types'
+import type { FilterItem, LabelValue, PopoverType, SearchValue } from '@/types'
 import { useDomIsContainsClick } from '@/hooks/useDomIsContains'
 import SearchSelect from './popover/SearchSelect.vue'
+import SearchCheck from './popover/SearchCheck.vue'
 
-const props = defineProps<{
-  filterList: FilterItem[]
-}>()
+const props = withDefaults(
+  defineProps<{
+    filterList: FilterItem[]
+    filterPlaceholder?: string
+    placeholder?: string
+  }>(),
+  {
+    filterPlaceholder: '添加筛选条件',
+    placeholder: '请输入搜索内容'
+  }
+)
 
 const emit = defineEmits<{
   search: [value: SearchValue[]]
@@ -66,6 +89,8 @@ const searchRef = ref<HTMLDivElement>()
 const inputRef = ref<InputInstance>()
 const scrollbarRef = ref<ScrollbarInstance>()
 const filterListRef = ref<InstanceType<typeof FilterList>>()
+const selectRef = ref<InstanceType<typeof SearchSelect>>()
+const checkRef = ref<InstanceType<typeof SearchCheck>>()
 
 const active = ref(false)
 
@@ -91,7 +116,19 @@ const filterOptions = computed(() =>
   })
 )
 
-const placeholder = computed(() => (prefix.value ? '添加筛选条件' : '默认按照站点搜索'))
+const selectOptions = computed(() => {
+  const val = inputValue.value.trim()
+  const list = activeFilterItem.value?.popoverOption?.select || []
+  return list.filter((v) => (val ? v.label.includes(val) : true))
+})
+
+const checkOptions = computed(() => {
+  const val = inputValue.value.trim()
+  const list = activeFilterItem.value?.popoverOption?.check || []
+  return list.filter((v) => (val ? v.label.includes(val) : true))
+})
+
+const placeholder = computed(() => (prefix.value ? props.filterPlaceholder : props.placeholder))
 const closeBtnVisible = computed(
   () => !!prefix.value || !!searchValue.value.length || !!inputValue.value
 )
@@ -100,12 +137,13 @@ const popoverShow = ref(false)
 
 // 没有选择filterItem时 列表不为空 显示
 const filterListVisible = computed(() => !prefix.value && !!filterOptions.value.length)
-const popoverVisible = computed(() => {
-  if (!popoverShow.value) return false
-  if (activeFilterItem.value?.popover) return true
-  if (filterListVisible.value) return true
 
-  return false
+const popoverVisible = computed(() => {
+  if (!popoverShow.value || !popoverType.value) return false
+  if (popoverType.value === 'filterList' && !filterOptions.value.length) return false
+  if (popoverType.value === 'select' && !selectOptions.value.length) return false
+  if (popoverType.value === 'check' && !checkOptions.value.length) return false
+  return true
 })
 
 // 空值显示列表
@@ -113,12 +151,6 @@ watch(inputValue, (val) => {
   if (!val.trim() && !prefix.value && filterOptions.value.length) {
     popoverShow.value = true
   }
-})
-
-// 是否区域内点击
-useDomIsContainsClick(searchRef, (val) => {
-  active.value = val
-  if (!val) popoverShow.value = val
 })
 
 function handleClear() {
@@ -130,6 +162,12 @@ function handleClear() {
   handleSearch()
 }
 
+function popoverNextTick() {
+  popoverShow.value = false
+  nextTick(() => (popoverShow.value = true))
+  inputRef.value?.focus()
+}
+
 function handleInputKeyDown(e: KeyboardEvent | Event) {
   const event = e as KeyboardEvent
 
@@ -138,14 +176,23 @@ function handleInputKeyDown(e: KeyboardEvent | Event) {
     if (prefix.value) prefix.value = ''
     else if (searchValue.value.length) {
       searchValue.value.splice(searchValue.value.length - 1, 1)
+      // fix popover 位置
+      popoverVisible.value && popoverNextTick()
     }
   }
 
   // filter列表上下
-  if (popoverVisible.value && filterListVisible.value) {
-    event.key === 'ArrowUp' && filterListRef.value?.activeUp()
-    event.key === 'ArrowDown' && filterListRef.value?.activeDown()
-    event.key === 'Enter' && filterListRef.value?.activeEnter()
+  if (popoverVisible.value) {
+    const condition = [
+      [filterListRef.value, filterListVisible.value],
+      [selectRef.value, popoverType.value === 'select'],
+      [checkRef.value, popoverType.value === 'check']
+    ]
+    const childRef = condition.find((v) => v[1])?.[0] as any
+
+    event.key === 'ArrowUp' && childRef?.activeUp()
+    event.key === 'ArrowDown' && childRef?.activeDown()
+    event.key === 'Enter' && childRef?.activeEnter()
   }
 
   // 确认
@@ -157,12 +204,7 @@ function handleInputKeyDown(e: KeyboardEvent | Event) {
     event.key === 'Enter' &&
     !activeFilterItem.value?.popover
   ) {
-    const firstItem = props.filterList.at(0)!
-    searchValue.value.push({
-      name: prefix.value || firstItem.name,
-      type: type.value || firstItem.type,
-      value: [val]
-    })
+    setSearchValue(val)
 
     prefix.value = ''
     inputValue.value = ''
@@ -173,20 +215,56 @@ function handleInputKeyDown(e: KeyboardEvent | Event) {
   }
 }
 
+function handleInputFocus() {
+  active.value = true
+  popoverShow.value = true
+}
+
+function handleInputBlur() {
+  active.value = false
+  popoverShow.value = false
+}
+
+function setSearchValue(value: string | string[]) {
+  const firstItem = props.filterList.at(0)!
+  searchValue.value.push({
+    name: prefix.value || firstItem.name,
+    type: type.value || firstItem.type,
+    value: Array.isArray(value) ? value : [value]
+  })
+}
+
 function setScrollBottom() {
   const warpRef = scrollbarRef.value?.wrapRef!
   const val = warpRef.scrollHeight - warpRef.clientHeight
   val && scrollbarRef.value?.setScrollTop(val)
 }
 
-function handleInputClick() {
-  popoverShow.value = true
+function handleFilterClick(item: FilterItem) {
+  inputValue.value = ''
+  prefix.value = item.name
+  if (!popoverType.value) popoverShow.value = false
+  else popoverNextTick()
 }
 
-function handleFilterClick(item: FilterItem) {
-  prefix.value = item.name
-  popoverShow.value = false
-  active.value = true
+function handleSelectClick(item: LabelValue) {
+  setSearchValue(item.value)
+  prefix.value = ''
+  inputValue.value = ''
+  popoverNextTick()
+}
+
+function handleCheckOk(items: LabelValue[]) {
+  setSearchValue(items.map((v) => v.value))
+  prefix.value = ''
+  inputValue.value = ''
+  popoverNextTick()
+}
+
+function handleCheckCancel() {
+  prefix.value = ''
+  inputValue.value = ''
+  popoverNextTick()
 }
 
 function handleSearch() {

@@ -6,9 +6,9 @@
         v-for="item in options"
         :key="item.type"
         class="filter-item"
-        :class="{ active: active === item.type }"
+        :class="{ active: active?.type === item.type }"
         @click.stop="emit('click', item)"
-        @mouseover="active = item.type"
+        @mouseover="active = item"
       >
         {{ item.name }}
       </div>
@@ -17,8 +17,9 @@
 </template>
 
 <script setup lang="ts">
+import { useActive } from '@/hooks/useActive'
 import type { FilterItem } from '@/types'
-import { computed, ref, watchEffect } from 'vue'
+import { ref, toRef, watchEffect } from 'vue'
 
 const props = defineProps<{
   options: FilterItem[]
@@ -28,34 +29,17 @@ const emit = defineEmits<{
   click: [value: FilterItem]
 }>()
 
-const active = ref('')
+const active = ref<FilterItem>()
 
-const activeItem = computed(() => {
-  if (!props.options.length || !active.value) return
-  return props.options.find((v) => v.type === active.value)
-})
-
-const activeIndex = computed(() =>
-  activeItem.value ? props.options.findIndex((v) => v === activeItem.value) : -1
+const { activeUp, activeDown, activeEnter } = useActive(
+  active,
+  toRef(() => props.options),
+  (item) => emit('click', item)
 )
 
 watchEffect(() => {
-  active.value = props.options.at(0)?.type || ''
+  active.value = props.options[0]
 })
 
-defineExpose({
-  activeUp: () => {
-    if (activeIndex.value < 0 || props.options.length === 1) return
-    const idx = activeIndex.value ? activeIndex.value - 1 : props.options.length - 1
-    active.value = props.options[idx].type
-  },
-  activeDown: () => {
-    if (activeIndex.value < 0 || props.options.length === 1) return
-    const idx = activeIndex.value !== props.options.length - 1 ? activeIndex.value + 1 : 0
-    active.value = props.options[idx].type
-  },
-  activeEnter: () => {
-    activeItem.value && emit('click', activeItem.value)
-  }
-})
+defineExpose({ activeUp, activeDown, activeEnter })
 </script>

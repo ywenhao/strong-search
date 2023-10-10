@@ -9,5 +9,5 @@ function handleSearch(item: SearchValue[]) {
 </script>
 
 <template>
-  <StrongSearch :filterList="filterList" @search="handleSearch" />
+  <StrongSearch :filterList="filterList" @search="handleSearch" placeholder="默认按照站点搜索" />
 </template>
