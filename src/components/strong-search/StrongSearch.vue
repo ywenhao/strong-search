@@ -270,6 +270,7 @@ function handleSelectClick(item: LabelValue) {
   setSearchValue(item.value)
   prefix.value = ''
   inputValue.value = ''
+  handleSearch()
   popoverNextTick()
 }
 
@@ -277,6 +278,7 @@ function handleCheckOk(items: LabelValue[]) {
   setSearchValue(items.map((v) => v.value))
   prefix.value = ''
   inputValue.value = ''
+  handleSearch()
   popoverNextTick()
 }
 
@@ -292,6 +294,7 @@ function handleDateOk(value: number[]) {
   setSearchValue(val, true)
   prefix.value = ''
   inputValue.value = ''
+  handleSearch()
   popoverNextTick()
 }
 
