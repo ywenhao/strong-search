@@ -1,10 +1,10 @@
 <template>
   <div ref="searchRef" class="strong-search" :class="{ active }">
+    <img :src="FilterSvg" class="filter-icon" />
     <ElScrollbar ref="scrollbarRef" class="search-scrollbar">
       <TagGroup v-model="searchValue" @tag-click="popoverShow = false" />
       <ElPopover
         :teleported="false"
-        :show-arrow="false"
         :visible="popoverVisible"
         placement="bottom-start"
         popper-class="search-popover"
@@ -21,8 +21,8 @@
           >
             <template #prefix v-if="prefix">{{ prefix }}:</template>
             <template #suffix>
-              <ElIcon v-if="closeBtnVisible" @click="handleClear"><CircleClose /></ElIcon>
-              <ElIcon @click="handleSearch"><Search /></ElIcon>
+              <SearchCloseIcon class="e-icon" v-if="closeBtnVisible" @click="handleClear" />
+              <SearchIcon class="e-icon" @click="handleSearch" />
             </template>
           </ElInput>
         </template>
@@ -60,10 +60,8 @@
 
 <script setup lang="ts">
 import { computed, nextTick, ref, watch, watchEffect } from 'vue'
-import { Search, CircleClose } from '@element-plus/icons-vue'
 import {
   ElScrollbar,
-  ElIcon,
   ElInput,
   ElPopover,
   type InputInstance,
@@ -75,18 +73,15 @@ import type { FilterItem, LabelValue, PopoverType, SearchValue } from './types'
 import SearchSelect from './popover/SearchSelect.vue'
 import SearchCheck from './popover/SearchCheck.vue'
 import SearchDate from './popover/SearchDate.vue'
+import FilterSvg from './icons/filter.svg'
+import SearchIcon from './icons/SearchIcon.vue'
+import SearchCloseIcon from './icons/SearchCloseIcon.vue'
 
-const props = withDefaults(
-  defineProps<{
-    filterList: FilterItem[]
-    filterPlaceholder?: string
-    placeholder?: string
-  }>(),
-  {
-    filterPlaceholder: '添加筛选条件',
-    placeholder: '请输入搜索内容'
-  }
-)
+const props = defineProps<{
+  filterList: FilterItem[]
+
+  placeholder?: string
+}>()
 
 const emit = defineEmits<{
   search: [value: SearchValue[]]
@@ -137,7 +132,11 @@ const checkOptions = computed(() => {
 
 const dateProps = computed(() => activeFilterItem.value?.popoverOption?.dateProps || {})
 
-const placeholder = computed(() => (prefix.value ? props.filterPlaceholder : props.placeholder))
+const filterPlaceholder = computed(() =>
+  !activeFilterItem.value?.popover ? `请输入${prefix.value}` : `请选择${prefix.value}`
+)
+
+const placeholder = computed(() => (prefix.value ? filterPlaceholder.value : props.placeholder))
 const closeBtnVisible = computed(
   () => !!prefix.value || !!searchValue.value.length || !!inputValue.value
 )

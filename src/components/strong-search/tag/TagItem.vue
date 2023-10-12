@@ -2,17 +2,17 @@
   <div class="tag-item">
     <span class="tag-prefix" v-if="modelValue.name">{{ `${modelValue.name}:` }}</span>
     <span class="tag-value">{{ value }}</span>
-    <ElIcon class="close-btn" @click="emit('delete', modelValue)">
-      <CircleCloseFilled />
-    </ElIcon>
+    <i class="close-btn" @click="emit('delete', modelValue)">
+      <TagClose />
+    </i>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { SearchValue } from '../types'
-import { ElIcon, dayjs } from 'element-plus'
-import { CircleCloseFilled } from '@element-plus/icons-vue'
+import { dayjs } from 'element-plus'
+import TagClose from '../icons/TagClose.vue'
 
 const props = defineProps<{
   modelValue: SearchValue
