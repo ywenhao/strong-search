@@ -15,7 +15,7 @@
         :label="item.value"
         :class="{ active: active === item.value }"
         @mouseover="active = item.value"
-        >{{ item.label }}</ElCheckbox
+        ><span :title="item.label">{{ item.label }}</span></ElCheckbox
       >
     </ElCheckboxGroup>
     <div class="search-popover-footer">

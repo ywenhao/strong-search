@@ -11,7 +11,10 @@ export const filterList = [
     popover: 'select',
     popoverOption: {
       select: [
-        { label: '嘻嘻', value: '嘻嘻' },
+        {
+          label: '嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻',
+          value: '嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻嘻'
+        },
         { label: '哈哈', value: '哈哈' },
         { label: '啊啊', value: '啊啊' },
         { label: '方法', value: '方法' }

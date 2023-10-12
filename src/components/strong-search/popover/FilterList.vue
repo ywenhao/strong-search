@@ -7,8 +7,9 @@
         :key="item.type"
         class="filter-item"
         :class="{ active: active?.type === item.type }"
-        @click.stop="emit('click', item)"
+        @click="emit('change', item)"
         @mouseover="active = item"
+        :title="item.name"
       >
         {{ item.name }}
       </div>
@@ -26,7 +27,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  click: [value: FilterItem]
+  change: [value: FilterItem]
 }>()
 
 const active = ref<FilterItem>()
@@ -34,7 +35,7 @@ const active = ref<FilterItem>()
 const { activeUp, activeDown, activeEnter } = useActive(
   active,
   toRef(() => props.options),
-  (item) => emit('click', item)
+  (item) => emit('change', item)
 )
 
 watchEffect(() => {

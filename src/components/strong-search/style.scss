@@ -1,6 +1,13 @@
 $rowHeight: 32px;
 $maxHeight: $rowHeight * 3;
 
+@mixin text-ell() {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  word-break: break-all;
+}
+
 .strong-search {
   --width: 400px;
   --filter-size: 16px;
@@ -88,9 +95,7 @@ $maxHeight: $rowHeight * 3;
 
     .tag-value {
       color: #323538;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      word-break: break-all;
+      @include text-ell();
     }
 
     .close-btn {
@@ -137,6 +142,7 @@ $maxHeight: $rowHeight * 3;
         cursor: pointer;
         padding: 6px 12px;
         padding-right: 0;
+        @include text-ell();
         &.active {
           color: var(--el-color-primary);
           background-color: #f2f5fc;
@@ -151,6 +157,7 @@ $maxHeight: $rowHeight * 3;
       cursor: pointer;
       padding: 6px 12px;
       padding-right: 0;
+      @include text-ell();
       &.active {
         color: var(--el-color-primary);
         background-color: #f2f5fc;
@@ -163,6 +170,9 @@ $maxHeight: $rowHeight * 3;
       padding-left: 2px;
       display: flex;
       margin-right: 0;
+      .el-checkbox__label {
+        @include text-ell();
+      }
       &.active {
         color: var(--el-color-primary);
         background-color: #f2f5fc;

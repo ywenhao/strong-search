@@ -30,12 +30,12 @@
         <FilterList
           ref="filterListRef"
           v-if="popoverType === 'filterList'"
-          @click="handleFilterClick"
+          @change="handleFilterClick"
           :options="filterOptions"
         />
         <SearchSelect
           ref="selectRef"
-          @click="handleSelectClick"
+          @change="handleSelectClick"
           :options="selectOptions"
           v-else-if="popoverType === 'select'"
         />
@@ -266,6 +266,7 @@ function handleFilterClick(item: FilterItem) {
 }
 
 function handleSelectClick(item: LabelValue) {
+  console.log(item)
   setSearchValue(item.value)
   prefix.value = ''
   inputValue.value = ''

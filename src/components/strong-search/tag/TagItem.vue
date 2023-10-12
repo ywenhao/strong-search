@@ -1,7 +1,7 @@
 <template>
   <div class="tag-item">
     <span class="tag-prefix" v-if="modelValue.name">{{ `${modelValue.name}:` }}</span>
-    <span class="tag-value">{{ value }}</span>
+    <span class="tag-value" :title="value">{{ value }}</span>
     <i class="close-btn" @click="emit('delete', modelValue)">
       <TagClose />
     </i>

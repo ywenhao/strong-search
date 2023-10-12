@@ -5,8 +5,9 @@
       v-for="item in options"
       :key="item.label"
       :class="{ active: active?.value === item.value }"
-      @click.stop="emit('click', item)"
+      @click="emit('change', item)"
       @mouseover="active = item"
+      :title="item.label"
     >
       {{ item.label }}
     </div>
@@ -23,7 +24,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  click: [value: LabelValue]
+  change: [value: LabelValue]
 }>()
 
 const active = ref<LabelValue>()
@@ -35,7 +36,7 @@ watchEffect(() => {
 const { activeUp, activeDown, activeEnter } = useActive(
   active,
   toRef(() => props.options),
-  (item) => emit('click', item)
+  (item) => emit('change', item)
 )
 
 defineExpose({ activeUp, activeDown, activeEnter })
