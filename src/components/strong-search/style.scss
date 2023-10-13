@@ -1,5 +1,5 @@
 $rowHeight: 32px;
-$maxHeight: $rowHeight * 3;
+$maxHeight: $rowHeight * 3 + 4px * (3 + 1);
 
 @mixin text-ell() {
   overflow: hidden;
@@ -34,15 +34,15 @@ $maxHeight: $rowHeight * 3;
       justify-content: flex-start;
       flex-wrap: wrap;
       align-items: center;
-      column-gap: 4px;
-      padding-left: 6px;
-      padding-right: 6px;
+      padding: 4px 6px;
+      gap: 4px;
     }
   }
 
   .search-input {
     flex: 1;
     flex-basis: 50%;
+    font-size: 12px;
     .el-input__wrapper {
       box-shadow: none;
       padding-left: 0;
@@ -77,7 +77,6 @@ $maxHeight: $rowHeight * 3;
   .tag-item {
     display: inline-flex;
     align-items: center;
-    margin: 4px 0;
     font-size: 12px;
     font-weight: 400;
     max-width: 100%;
