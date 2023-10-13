@@ -211,7 +211,9 @@ function handleInputFocus() {
 const noClosePopover = ref(false)
 
 watchEffect(() => {
-  if (popoverType.value && ['date', 'check'].includes(popoverType.value) && popoverVisible.value) {
+  // 点击弹窗，不主动关闭
+  const noCloseTypes: PopoverType[] = ['date', 'check']
+  if (popoverType.value && noCloseTypes.includes(popoverType.value) && popoverVisible.value) {
     noClosePopover.value = true
   }
 })
