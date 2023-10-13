@@ -9,10 +9,7 @@ $maxHeight: $rowHeight * 3;
 }
 
 .strong-search {
-  --width: 400px;
-  --filter-size: 16px;
-
-  width: var(--width);
+  width: 400px;
   border: 1px solid;
   border-color: var(--el-border-color);
   border-radius: 4px;
@@ -21,13 +18,13 @@ $maxHeight: $rowHeight * 3;
   align-items: center;
 
   .filter-icon {
-    width: var(--filter-size);
-    height: var(--filter-size);
+    width: 16px;
+    height: 16px;
     margin-left: 8px;
   }
 
   .search-scrollbar {
-    width: calc(var(--width) - var(--filter-size) - 12px);
+    flex: 1;
     position: relative;
     overflow: visible;
     .el-scrollbar__view {
@@ -43,7 +40,7 @@ $maxHeight: $rowHeight * 3;
 
   .search-input {
     flex: 1;
-    min-width: 180px;
+    flex-basis: 50%;
     .el-input__wrapper {
       box-shadow: none;
       padding-left: 0;
