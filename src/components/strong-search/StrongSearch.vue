@@ -211,7 +211,7 @@ function handleInputFocus() {
 const noClosePopover = ref(false)
 
 watchEffect(() => {
-  if (popoverType.value === 'date' && popoverVisible.value === true) {
+  if (popoverType.value && ['date', 'check'].includes(popoverType.value) && popoverVisible.value) {
     noClosePopover.value = true
   }
 })
