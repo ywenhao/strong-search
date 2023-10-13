@@ -29,19 +29,16 @@
         </template>
 
         <FilterList
-          ref="filterListRef"
           v-if="popoverType === 'filterList'"
           @change="handleFilterChange"
           :options="filterOptions"
         />
         <SearchSelect
-          ref="selectRef"
           @change="handleSelectChange"
           :options="selectOptions"
           v-else-if="popoverType === 'select'"
         />
         <SearchCheck
-          ref="checkRef"
           @ok="handleCheckOk"
           @cancel="handleCheckCancel"
           :options="checkOptions"
@@ -90,9 +87,6 @@ const emit = defineEmits<{
 const searchRef = ref<HTMLDivElement>()
 const inputRef = ref<InputInstance>()
 const scrollbarRef = ref<ScrollbarInstance>()
-const filterListRef = ref<InstanceType<typeof FilterList>>()
-const selectRef = ref<InstanceType<typeof SearchSelect>>()
-const checkRef = ref<InstanceType<typeof SearchCheck>>()
 
 const active = ref(false)
 
@@ -143,9 +137,6 @@ const closeBtnVisible = computed(
 
 const popoverShow = ref(false)
 
-// 没有选择filterItem时 列表不为空 显示
-const filterListVisible = computed(() => !prefix.value && !!filterOptions.value.length)
-
 const popoverVisible = computed(() => {
   if (!popoverShow.value || !popoverType.value) return false
   if (popoverType.value === 'filterList' && !filterOptions.value.length) return false
@@ -188,20 +179,6 @@ function handleInputKeyDown(e: KeyboardEvent | Event) {
       // fix popover 位置
       popoverVisible.value && popoverNextTick()
     }
-  }
-
-  // filter列表上下
-  if (popoverVisible.value) {
-    const condition = [
-      [filterListRef.value, filterListVisible.value],
-      [selectRef.value, popoverType.value === 'select'],
-      [checkRef.value, popoverType.value === 'check']
-    ]
-    const childRef = condition.find((v) => v[1])?.[0] as any
-
-    event.key === 'ArrowUp' && childRef?.activeUp()
-    event.key === 'ArrowDown' && childRef?.activeDown()
-    event.key === 'Enter' && childRef?.activeEnter()
   }
 
   // 确认

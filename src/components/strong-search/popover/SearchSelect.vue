@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { useActive } from '../hooks/useActive'
+import { useActiveKeyDown } from '../hooks/useActiveKeyDown'
 import type { LabelValue } from '../types'
 import { ref, toRef, watchEffect } from 'vue'
 
@@ -29,15 +29,13 @@ const emit = defineEmits<{
 
 const active = ref<LabelValue>()
 
-watchEffect(() => {
-  active.value = props.options[0]
-})
-
-const { activeUp, activeDown, activeEnter } = useActive(
+useActiveKeyDown(
   active,
   toRef(() => props.options),
   (item) => emit('change', item)
 )
 
-defineExpose({ activeUp, activeDown, activeEnter })
+watchEffect(() => {
+  active.value = props.options[0]
+})
 </script>

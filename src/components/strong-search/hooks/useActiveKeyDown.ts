@@ -1,4 +1,4 @@
-import { computed, toRaw, type Ref } from 'vue'
+import { computed, toRaw, type Ref, onMounted, onBeforeUnmount } from 'vue'
 
 /**
  * 简化active 按键操作
@@ -8,7 +8,7 @@ import { computed, toRaw, type Ref } from 'vue'
  * @param activeKey
  * @returns
  */
-export function useActive<
+export function useActiveKeyDown<
   P extends object | string,
   T extends P[K] | P | undefined,
   K extends keyof P,
@@ -50,6 +50,20 @@ export function useActive<
   const activeEnter = () => {
     activeItem.value && enterFn && enterFn(activeItem.value)
   }
+
+  function onKeyDown(e: KeyboardEvent) {
+    e.key === 'ArrowUp' && activeUp()
+    e.key === 'ArrowDown' && activeDown()
+    e.key === 'Enter' && activeEnter()
+  }
+
+  onMounted(() => {
+    window.addEventListener('keydown', onKeyDown)
+  })
+
+  onBeforeUnmount(() => {
+    window.removeEventListener('keydown', onKeyDown)
+  })
 
   return { activeUp, activeDown, activeEnter, activeItem }
 }

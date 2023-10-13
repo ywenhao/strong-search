@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { useActive } from '../hooks/useActive'
+import { useActiveKeyDown } from '../hooks/useActiveKeyDown'
 import type { LabelValue } from '../types'
 import { ElButton } from 'element-plus'
 import CheckSvg from '../icons/check.svg'
@@ -71,14 +71,8 @@ function onClear() {
   check.value = []
 }
 
-const { activeUp, activeDown } = useActive(active, actives)
-
-defineExpose({
-  activeUp,
-  activeDown,
-  activeEnter() {
-    if (!props.options.length || !active.value) return
-    handleClick(active.value)
-  }
+useActiveKeyDown(active, actives, () => {
+  if (!props.options.length || !active.value) return
+  handleClick(active.value)
 })
 </script>
