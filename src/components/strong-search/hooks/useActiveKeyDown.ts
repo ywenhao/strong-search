@@ -58,11 +58,11 @@ export function useActiveKeyDown<
   }
 
   onMounted(() => {
-    window.addEventListener('keydown', onKeyDown)
+    window.addEventListener('keydown', onKeyDown, true)
   })
 
   onBeforeUnmount(() => {
-    window.removeEventListener('keydown', onKeyDown)
+    window.removeEventListener('keydown', onKeyDown, true)
   })
 
   return { activeUp, activeDown, activeEnter, activeItem }

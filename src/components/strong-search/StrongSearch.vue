@@ -31,7 +31,7 @@
         </template>
 
         <FilterList
-          v-if="popoverType === 'filterList'"
+          v-if="filterOptions.length && popoverType === 'filterList'"
           @change="handleFilterChange"
           :options="filterOptions"
         />
@@ -218,8 +218,8 @@ watchEffect(() => {
 
 function handleInputBlur() {
   if (noClosePopover.value) return
-  // active.value = false
-  // popoverShow.value = false
+  active.value = false
+  popoverShow.value = false
 }
 
 function setSearchValue(value: string | string[], isDate?: boolean) {
@@ -246,7 +246,6 @@ function handleFilterChange(item: FilterItem) {
 }
 
 function handleSelectChange(item: LabelValue) {
-  console.log(item)
   setSearchValue(item.value)
   prefix.value = ''
   inputValue.value = ''
