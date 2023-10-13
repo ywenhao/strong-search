@@ -1,6 +1,8 @@
 <template>
   <div ref="searchRef" class="strong-search" :class="{ active }">
-    <img :src="FilterSvg" class="filter-icon" />
+    <i class="filter-icon">
+      <img :src="FilterSvg" alt="" />
+    </i>
     <ElScrollbar ref="scrollbarRef" class="search-scrollbar">
       <TagGroup v-model="searchValue" @tag-click="popoverShow = false" />
       <ElPopover
