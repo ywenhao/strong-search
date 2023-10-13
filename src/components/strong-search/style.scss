@@ -26,6 +26,7 @@ $maxHeight: $rowHeight * 3;
 
   .search-scrollbar {
     flex: 1;
+    max-width: calc(100% - 16px - 14px);
     position: relative;
     overflow: visible;
     .el-scrollbar__view {
@@ -86,6 +87,11 @@ $maxHeight: $rowHeight * 3;
     background-color: #f3f4f7;
     white-space: nowrap;
 
+    .tag-content {
+      display: flex;
+      max-width: calc(100% - 4px - 14px);
+    }
+
     .tag-prefix {
       color: #323538;
       margin-right: 4px;
@@ -93,6 +99,7 @@ $maxHeight: $rowHeight * 3;
 
     .tag-value {
       color: #323538;
+      flex: 1;
       @include text-ell();
     }
 
@@ -128,22 +135,34 @@ $maxHeight: $rowHeight * 3;
 }
 
 .search-popover {
+  &.el-popover.el-popper {
+    padding: 0;
+    color: #323538;
+  }
+
+  .el-popper__arrow {
+    left: 8px !important;
+  }
+
   .filter-list {
     .filter-title {
+      margin-top: 8px;
+      margin-left: 8px;
       color: #8a8e99;
       font-weight: 700;
     }
 
     .filter-content {
       font-size: 12px;
+      font-weight: 400;
       .filter-item {
         cursor: pointer;
-        padding: 6px 12px;
-        padding-right: 0;
+        padding: 8px 12px;
         @include text-ell();
+        line-height: 16px;
         &.active {
           color: var(--el-color-primary);
-          background-color: #f2f5fc;
+          background-color: rgba(21, 98, 252, 0.04);
         }
       }
     }
@@ -151,49 +170,68 @@ $maxHeight: $rowHeight * 3;
 
   .search-select {
     font-size: 12px;
+    font-weight: 400;
     .search-option {
       cursor: pointer;
-      padding: 6px 12px;
-      padding-right: 0;
+      padding: 8px 12px;
       @include text-ell();
+      line-height: 16px;
       &.active {
         color: var(--el-color-primary);
-        background-color: #f2f5fc;
+        background-color: rgba(21, 98, 252, 0.04);
       }
     }
   }
 
   .search-check {
-    .el-checkbox {
-      padding-left: 2px;
+    .check-option {
+      line-height: 16px;
       display: flex;
-      margin-right: 0;
-      .el-checkbox__label {
-        @include text-ell();
-      }
+      width: 100%;
+      align-items: center;
+      cursor: pointer;
+      padding: 8px 12px;
+      justify-content: space-between;
       &.active {
         color: var(--el-color-primary);
-        background-color: #f2f5fc;
+        background-color: rgba(21, 98, 252, 0.04);
       }
+    }
+
+    .check-label {
+      font-size: 12px;
+      font-weight: 400;
+      @include text-ell();
+      flex: 1;
+    }
+
+    .check-icon {
+      width: 16px;
+      height: 16px;
+      margin-left: 10px;
     }
   }
 
   .search-date {
     .date-title {
+      margin-top: 8px;
+      margin-left: 8px;
       color: #8a8e99;
       font-weight: 700;
       font-size: 13px;
     }
     .tip-title {
       font-size: 13px;
-      margin-bottom: 2px;
+      margin-bottom: 4px;
     }
 
     .date-content {
-      margin-top: 2px;
-      .date-start,
+      padding: 8px 12px;
+      .date-start {
+        margin-bottom: 10px;
+      }
       .date-end {
-        margin-bottom: 6px;
+        margin-bottom: 2px;
       }
 
       .el-date-editor {
@@ -204,7 +242,7 @@ $maxHeight: $rowHeight * 3;
   }
 
   .search-popover-footer {
-    padding-top: 8px;
+    padding: 8px 0;
     border-top: 1px solid var(--el-border-color);
     text-align: center;
   }

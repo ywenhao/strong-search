@@ -11,7 +11,6 @@
           type="date"
           :disabled-date="starDisabledDate"
           placeholder="请选择日期"
-          size="small"
         />
       </div>
       <div class="date-end">
@@ -21,9 +20,8 @@
           value-format="X"
           v-model="end"
           type="date"
-          :disabled-date="endDisabledDate"
+          :disabled-date="endDisabledDateFn"
           placeholder="请选择日期"
-          size="small"
         />
       </div>
     </div>
@@ -38,10 +36,10 @@
 </template>
 
 <script setup lang="ts">
-import { ElDatePicker, ElButton } from 'element-plus'
+import { ElDatePicker, ElButton, dayjs } from 'element-plus'
 import { ref } from 'vue'
 
-defineProps<{
+const props = defineProps<{
   starDisabledDate?: Function
   endDisabledDate?: Function
 }>()
@@ -62,6 +60,15 @@ function onClear() {
 function handleCancel() {
   emit('cancel')
   onClear()
+}
+
+function endDisabledDateFn(value: Date) {
+  if (start.value) {
+    const startDate = dayjs.unix(start.value)
+    const endDate = dayjs(value)
+    return !endDate.isAfter(startDate) || props.endDisabledDate?.(value)
+  }
+  return props.endDisabledDate?.(value)
 }
 
 function handleOk() {

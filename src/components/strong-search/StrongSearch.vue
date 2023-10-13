@@ -4,6 +4,7 @@
     <ElScrollbar ref="scrollbarRef" class="search-scrollbar">
       <TagGroup v-model="searchValue" @tag-click="popoverShow = false" />
       <ElPopover
+        :width="180"
         :teleported="false"
         :visible="popoverVisible"
         placement="bottom-start"
@@ -30,12 +31,12 @@
         <FilterList
           ref="filterListRef"
           v-if="popoverType === 'filterList'"
-          @change="handleFilterClick"
+          @change="handleFilterChange"
           :options="filterOptions"
         />
         <SearchSelect
           ref="selectRef"
-          @change="handleSelectClick"
+          @change="handleSelectChange"
           :options="selectOptions"
           v-else-if="popoverType === 'select'"
         />
@@ -79,7 +80,6 @@ import SearchCloseIcon from './icons/SearchCloseIcon.vue'
 
 const props = defineProps<{
   filterList: FilterItem[]
-
   placeholder?: string
 }>()
 
@@ -181,8 +181,9 @@ function handleInputKeyDown(e: KeyboardEvent | Event) {
 
   // 删除
   if (event.key === 'Backspace' && !inputValue.value) {
-    if (prefix.value) prefix.value = ''
-    else if (searchValue.value.length) {
+    if (prefix.value) {
+      prefix.value = ''
+    } else if (searchValue.value.length) {
       searchValue.value.splice(searchValue.value.length - 1, 1)
       // fix popover 位置
       popoverVisible.value && popoverNextTick()
@@ -238,8 +239,8 @@ watchEffect(() => {
 
 function handleInputBlur() {
   if (noClosePopover.value) return
-  active.value = false
-  popoverShow.value = false
+  // active.value = false
+  // popoverShow.value = false
 }
 
 function setSearchValue(value: string | string[], isDate?: boolean) {
@@ -258,14 +259,14 @@ function setScrollBottom() {
   val && scrollbarRef.value?.setScrollTop(val)
 }
 
-function handleFilterClick(item: FilterItem) {
+function handleFilterChange(item: FilterItem) {
   inputValue.value = ''
   prefix.value = item.name
   if (!popoverType.value) popoverShow.value = false
   else popoverNextTick()
 }
 
-function handleSelectClick(item: LabelValue) {
+function handleSelectChange(item: LabelValue) {
   console.log(item)
   setSearchValue(item.value)
   prefix.value = ''

@@ -1,7 +1,9 @@
 <template>
   <div class="tag-item">
-    <span class="tag-prefix" v-if="modelValue.name">{{ `${modelValue.name}:` }}</span>
-    <span class="tag-value" :title="value">{{ value }}</span>
+    <div class="tag-content" :title="`${modelValue.name}：${value}`">
+      <span class="tag-prefix" v-if="modelValue.name">{{ `${modelValue.name}:` }}</span>
+      <span class="tag-value">{{ value }}</span>
+    </div>
     <i class="close-btn" @click="emit('delete', modelValue)">
       <TagClose />
     </i>
