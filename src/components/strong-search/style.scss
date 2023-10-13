@@ -16,6 +16,7 @@ $maxHeight: $rowHeight * 3;
   max-height: $maxHeight;
   display: inline-flex;
   align-items: center;
+  transition: var(--el-transition-border);
 
   .filter-icon {
     width: 16px;
