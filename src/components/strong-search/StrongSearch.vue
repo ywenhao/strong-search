@@ -256,6 +256,7 @@ function handleSelectChange(item: LabelValue) {
 }
 
 function handleCheckOk(items: LabelValue[]) {
+  noClosePopover.value = false
   setSearchValue(items.map((v) => v.value))
   prefix.value = ''
   inputValue.value = ''
@@ -264,6 +265,7 @@ function handleCheckOk(items: LabelValue[]) {
 }
 
 function handleCheckCancel() {
+  noClosePopover.value = false
   prefix.value = ''
   inputValue.value = ''
   popoverNextTick()
