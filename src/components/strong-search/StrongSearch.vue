@@ -300,7 +300,8 @@ function handleDateCancel() {
   popoverNextTick()
 }
 
-function handleSearch() {
+async function handleSearch() {
+  await nextTick()
   emit('search', searchValue.value)
 }
 
