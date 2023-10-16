@@ -9,7 +9,7 @@ import { computed, toRaw, type Ref, onMounted, onBeforeUnmount } from 'vue'
  * @returns
  */
 export function useActiveKeyDown<
-  P extends object | string,
+  P extends object | string | number,
   T extends P[K] | P | undefined,
   K extends keyof P,
   EnterFn extends (value: P) => void
