@@ -113,9 +113,10 @@ const searchValue = computed<SearchValue[]>({
 const filterOptions = computed(() =>
   props.filterList.filter((v) => {
     const val = inputValue.value.trim()
-    return !searchValue.value.some((item) => item.type === v.type) && !val
-      ? true
-      : v.name.includes(val)
+    return (
+      !searchValue.value.some((item) => item.type === v.type) &&
+      (!val ? true : v.name.includes(val))
+    )
   })
 )
 
