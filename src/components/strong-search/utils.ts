@@ -17,6 +17,6 @@ export function formatValue(value: SearchValue[]) {
       }
       return prev
     },
-    {} as Record<string, any>
+    {} as Record<string, string>
   )
 }
