@@ -306,9 +306,10 @@ function handleSearch() {
 function handleClickSearch() {
   const val = inputValue.value.trim()
   if (val) {
-    if (!prefix.value) {
+    if (!popoverVisible.value && props.filterList.length && !activeFilterItem.value?.popover) {
       setSearchValue([{ label: val, value: val }])
     }
+    if (prefix.value) prefix.value = ''
     inputValue.value = ''
   }
   handleSearch()
