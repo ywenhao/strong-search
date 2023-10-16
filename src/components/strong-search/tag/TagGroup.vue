@@ -9,6 +9,7 @@
 </template>
 
 <script setup lang="ts">
+import { nextTick } from 'vue'
 import type { SearchValue } from '../types'
 import TagItem from './TagItem.vue'
 
@@ -19,10 +20,13 @@ const props = defineProps<{
 const emit = defineEmits<{
   'update:modelValue': [value: SearchValue[]]
   'tag-click': []
+  delete: []
 }>()
 
-function handleDelete(value: SearchValue) {
+async function handleDelete(value: SearchValue) {
   const item = props.modelValue.filter((v) => v !== value)
   emit('update:modelValue', item)
+  await nextTick()
+  emit('delete')
 }
 </script>

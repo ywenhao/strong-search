@@ -4,7 +4,7 @@
       <img :src="FilterSvg" alt="" />
     </i>
     <ElScrollbar ref="scrollbarRef" class="search-scrollbar">
-      <TagGroup v-model="searchValue" @tag-click="popoverShow = false" />
+      <TagGroup @delete="handleSearch" v-model="searchValue" @tag-click="popoverShow = false" />
       <ElPopover
         :width="180"
         :teleported="false"
