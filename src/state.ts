@@ -1,5 +1,6 @@
 import type { FilterItem } from './components/strong-search/types'
 
+// popover 不写为默认输入
 export const filterList = [
   {
     name: '域名',
