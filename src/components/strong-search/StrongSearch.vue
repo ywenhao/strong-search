@@ -78,12 +78,14 @@ import SearchIcon from './icons/SearchIcon.vue'
 import SearchCloseIcon from './icons/SearchCloseIcon.vue'
 
 const props = defineProps<{
+  modelValue: SearchValue[]
   filterList: FilterItem[]
   placeholder?: string
 }>()
 
 const emit = defineEmits<{
   search: [value: SearchValue[]]
+  'update:modelValue': [value: SearchValue[]]
 }>()
 
 const searchRef = ref<HTMLDivElement>()
@@ -102,7 +104,10 @@ const popoverType = computed<PopoverType | null>(() =>
   !prefix.value ? 'filterList' : activeFilterItem.value?.popover || null
 )
 const inputValue = ref('')
-const searchValue = ref<SearchValue[]>([])
+const searchValue = computed<SearchValue[]>({
+  get: () => props.modelValue,
+  set: (val) => emit('update:modelValue', val)
+})
 
 // 搜索、过滤
 const filterOptions = computed(() =>
