@@ -3,7 +3,7 @@ export type FilterPopover = Exclude<PopoverType, 'filterList'>
 
 export type LabelValue = {
   label: string
-  value: string
+  value: string | number
 }
 
 export type PopoverOption = {
@@ -27,4 +27,5 @@ export type SearchValue = {
   type: string
   isDate?: boolean
   value: string[]
+  options: LabelValue[]
 }

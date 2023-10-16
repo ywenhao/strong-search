@@ -192,7 +192,7 @@ function handleInputKeyDown(e: KeyboardEvent | Event) {
     event.key === 'Enter' &&
     !activeFilterItem.value?.popover
   ) {
-    setSearchValue(val)
+    setSearchValue([{ label: val, value: val }])
 
     prefix.value = ''
     inputValue.value = ''
@@ -224,13 +224,14 @@ function handleInputBlur() {
   popoverShow.value = false
 }
 
-function setSearchValue(value: string | string[], isDate?: boolean) {
+function setSearchValue(options: LabelValue[], isDate?: boolean) {
   const firstItem = props.filterList.at(0)!
   searchValue.value.push({
     isDate,
+    options,
+    value: options.map((v) => String(v.value)),
     name: prefix.value || firstItem.name,
-    type: type.value || firstItem.type,
-    value: Array.isArray(value) ? value : [value]
+    type: type.value || firstItem.type
   })
 }
 
@@ -248,7 +249,7 @@ function handleFilterChange(item: FilterItem) {
 }
 
 function handleSelectChange(item: LabelValue) {
-  setSearchValue(item.value)
+  setSearchValue([item])
   prefix.value = ''
   inputValue.value = ''
   handleSearch()
@@ -257,7 +258,7 @@ function handleSelectChange(item: LabelValue) {
 
 function handleCheckOk(items: LabelValue[]) {
   noClosePopover.value = false
-  setSearchValue(items.map((v) => v.value))
+  setSearchValue(items)
   prefix.value = ''
   inputValue.value = ''
   handleSearch()
@@ -274,7 +275,10 @@ function handleCheckCancel() {
 function handleDateOk(value: number[]) {
   noClosePopover.value = false
   const val = value.map((v) => (v ? String(v) : ''))
-  setSearchValue(val, true)
+  setSearchValue(
+    val.map((v) => ({ label: v, value: v })),
+    true
+  )
   prefix.value = ''
   inputValue.value = ''
   handleSearch()

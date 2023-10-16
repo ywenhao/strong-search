@@ -33,6 +33,6 @@ const value = computed(() => {
     if (val[0]) return `≥${val[0]}`
     if (val[1]) return `≤${val[1]}`
   }
-  return props.modelValue.value.join(',')
+  return props.modelValue.options.map((v) => v.label).join(',')
 })
 </script>
