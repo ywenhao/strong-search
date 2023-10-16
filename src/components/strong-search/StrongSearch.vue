@@ -294,7 +294,7 @@ function handleSearch() {
 
 onMounted(() => {
   if (!props.filterList.length) {
-    console.error('配置项目 `filterList` 长度不能为 0')
+    console.error('props配置 `filterList` 长度不能为 0')
   }
 })
 </script>
