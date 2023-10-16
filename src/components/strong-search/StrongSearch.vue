@@ -25,7 +25,7 @@
             <template #prefix v-if="prefix">{{ prefix }}:</template>
             <template #suffix>
               <SearchCloseIcon class="e-icon" v-if="closeBtnVisible" @click="handleClear" />
-              <SearchIcon class="e-icon" @click="handleSearch" />
+              <SearchIcon class="e-icon" @click="handleClickSearch" />
             </template>
           </ElInput>
         </template>
@@ -185,6 +185,8 @@ function handleInputKeyDown(e: KeyboardEvent | Event) {
       searchValue.value.splice(searchValue.value.length - 1, 1)
       // fix popover 位置
       popoverVisible.value && popoverNextTick()
+
+      handleSearch()
     }
   }
 
@@ -299,6 +301,17 @@ function handleDateCancel() {
 
 function handleSearch() {
   emit('search', searchValue.value)
+}
+
+function handleClickSearch() {
+  const val = inputValue.value.trim()
+  if (val) {
+    if (!prefix.value) {
+      setSearchValue([{ label: val, value: val }])
+    }
+    inputValue.value = ''
+  }
+  handleSearch()
 }
 
 onMounted(() => {
