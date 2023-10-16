@@ -59,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, ref, watch, watchEffect } from 'vue'
+import { computed, nextTick, onMounted, ref, watch, watchEffect } from 'vue'
 import {
   ElScrollbar,
   ElInput,
@@ -291,6 +291,12 @@ function handleDateCancel() {
 function handleSearch() {
   emit('search', searchValue.value)
 }
+
+onMounted(() => {
+  if (!props.filterList.length) {
+    console.error('配置项目 `filterList` 长度不能为 0')
+  }
+})
 </script>
 
 <style lang="scss">
