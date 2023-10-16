@@ -1,4 +1,4 @@
-import type { FilterItem } from '../types'
+import type { FilterItem } from './components/strong-search/types'
 
 export const filterList = [
   {
