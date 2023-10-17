@@ -1,5 +1,5 @@
 <template>
-  <i class="search--close-icon" @mouseover="active = true" @mouseout="active = false">
+  <i class="search-close-icon" @mouseover="active = true" @mouseout="active = false">
     <img :src="active ? SearchActive : Search" alt="" />
   </i>
 </template>
