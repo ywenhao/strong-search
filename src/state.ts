@@ -41,7 +41,13 @@ export const filterList = [
   {
     name: '创建时间',
     popover: 'date',
-    type: 'create-date'
+    type: 'create-date',
+    popoverOption: {
+      dateProps: {
+        startKey: 'start',
+        endKey: 'end'
+      }
+    }
   },
   {
     name: '所属项目',

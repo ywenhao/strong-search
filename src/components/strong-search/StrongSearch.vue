@@ -236,8 +236,8 @@ function handleInputBlur() {
 
 function setSearchValue(options: LabelValue[], isDate?: boolean) {
   const firstItem = props.filterList.at(0)!
-  const dateStartKey = activeFilterItem.value?.popoverOption?.dateProps?.startKey
-  const dateEndKey = activeFilterItem.value?.popoverOption?.dateProps?.startKey
+  const dateStartKey = dateProps.value.startKey
+  const dateEndKey = dateProps.value.endKey
   searchValue.value.push({
     isDate,
     options,
