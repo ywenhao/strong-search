@@ -59,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch, watchEffect } from 'vue'
+import { computed, nextTick, onMounted, ref, watch, watchEffect, type ComputedRef } from 'vue'
 import {
   ElScrollbar,
   ElInput,
@@ -69,7 +69,7 @@ import {
 } from 'element-plus'
 import TagGroup from './tag/TagGroup.vue'
 import FilterList from './popover/FilterList.vue'
-import type { FilterItem, LabelValue, PopoverType, SearchValue } from './types'
+import type { FilterItem, LabelValue, PopoverOption, PopoverType, SearchValue } from './types'
 import SearchSelect from './popover/SearchSelect.vue'
 import SearchCheck from './popover/SearchCheck.vue'
 import SearchDate from './popover/SearchDate.vue'
@@ -132,7 +132,9 @@ const checkOptions = computed(() => {
   return list.filter((v) => (val ? v.label.includes(val) : true))
 })
 
-const dateProps = computed(() => activeFilterItem.value?.popoverOption?.dateProps || {})
+const dateProps = computed(
+  () => activeFilterItem.value?.popoverOption?.dateProps || {}
+) as ComputedRef<PopoverOption['dateProps'] & {}>
 
 const filterPlaceholder = computed(() =>
   !activeFilterItem.value?.popover ? `请输入${prefix.value}` : `请选择${prefix.value}`
@@ -234,9 +236,13 @@ function handleInputBlur() {
 
 function setSearchValue(options: LabelValue[], isDate?: boolean) {
   const firstItem = props.filterList.at(0)!
+  const dateStartKey = activeFilterItem.value?.popoverOption?.dateProps?.startKey
+  const dateEndKey = activeFilterItem.value?.popoverOption?.dateProps?.startKey
   searchValue.value.push({
     isDate,
     options,
+    dateStartKey,
+    dateEndKey,
     value: options.map((v) => String(v.value)),
     name: prefix.value || firstItem.name,
     type: type.value || firstItem.type
