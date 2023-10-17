@@ -17,6 +17,7 @@
             ref="inputRef"
             v-model="inputValue"
             class="search-input"
+            :maxlength="maxLength"
             :placeholder="placeholder"
             @focus="handleInputFocus"
             @blur="handleInputBlur"
@@ -97,6 +98,9 @@ const active = ref(false)
 const prefix = ref('')
 
 const activeFilterItem = computed(() => props.filterList.find((v) => v.name === prefix.value))
+const maxLength = computed(
+  () => activeFilterItem.value?.maxLength ?? props.filterList[0]?.maxLength
+)
 
 // 默认列表第一个type
 const type = computed(() => activeFilterItem.value?.type)

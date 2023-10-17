@@ -20,6 +20,7 @@ export type PopoverOption = {
 export type FilterItem = {
   name: string
   type: string
+  maxLength?: number
   popover?: FilterPopover
   popoverOption?: PopoverOption
 }
