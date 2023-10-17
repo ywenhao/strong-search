@@ -1,4 +1,4 @@
-import type { SearchValue } from './types'
+import type { FilterItem, SearchValue } from './types'
 
 /**
  * 格式化搜索value
@@ -24,4 +24,30 @@ export function formatValue(value: SearchValue[]) {
     },
     {} as Record<string, string>
   )
+}
+
+/**
+ * 设置state
+ * @param obj
+ * @param state
+ * @param filterList
+ */
+export function setStateBySearchObj<O extends object, T extends object>(
+  obj: O,
+  state: T,
+  filterList: FilterItem[]
+) {
+  filterList.forEach((item) => {
+    if (item.popover === 'date') {
+      const startKey = item.popoverOption?.dateProps?.startKey!
+      const endKey = item.popoverOption?.dateProps?.endKey!
+      // @ts-ignore
+      state[startKey] = obj[startKey]
+      // @ts-ignore
+      state[endKey] = obj[endKey]
+    } else {
+      // @ts-ignore
+      state[item.type] = obj[item.type]
+    }
+  })
 }
