@@ -2,10 +2,10 @@ import { computed, toRaw, type Ref, onMounted, onBeforeUnmount } from 'vue'
 
 /**
  * 简化active 按键操作
- * @param options 数据源
  * @param active 激活状态
- * @param emit
- * @param activeKey
+ * @param options 数据源
+ * @param EnterFn 确认函数
+ * @param activeKey 激活key
  * @returns
  */
 export function useActiveKeyDown<
