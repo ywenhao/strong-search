@@ -9,7 +9,7 @@
           value-format="X"
           v-model="start"
           type="date"
-          :disabled-date="starDisabledDate"
+          :disabled-date="startDisabledDateFn"
           placeholder="请选择日期"
         />
       </div>
@@ -60,6 +60,15 @@ function onClear() {
 function handleCancel() {
   emit('cancel')
   onClear()
+}
+
+function startDisabledDateFn(value: Date) {
+  if (end.value) {
+    const endDate = dayjs.unix(end.value)
+    const startDate = dayjs(value)
+    return !startDate.isBefore(endDate) || props.starDisabledDate?.(value)
+  }
+  return props.endDisabledDate?.(value)
 }
 
 function endDisabledDateFn(value: Date) {
