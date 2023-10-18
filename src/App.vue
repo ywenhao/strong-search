@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import StrongSearch from './components/strong-search/StrongSearch.vue'
-import type { SearchValue } from './components/strong-search/types'
-import { formatValue } from './components/strong-search/utils'
+import { formatValue, StrongSearch, type SearchValue } from './components/strong-search'
 import { filterList } from './state'
 
 const searchValue = ref<SearchValue[]>([])
