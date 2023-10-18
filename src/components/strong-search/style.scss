@@ -137,6 +137,10 @@ $maxHeight: $rowHeight * $maxCount + 4px * ($maxCount + 1) + 2px;
     }
   }
 
+  &:hover {
+    border-color: #c0c4cc;
+  }
+
   &.active {
     border-color: var(--el-color-primary);
     .search-input {
