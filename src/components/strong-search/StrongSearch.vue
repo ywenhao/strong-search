@@ -197,7 +197,7 @@ function handleInputKeyDown(e: KeyboardEvent | Event) {
     }
   }
 
-  // 确认
+  // 直接输入确认
   const val = inputValue.value.trim()
   if (
     val &&
@@ -206,6 +206,7 @@ function handleInputKeyDown(e: KeyboardEvent | Event) {
     event.key === 'Enter' &&
     !activeFilterItem.value?.popover
   ) {
+    delFilterFirstItem()
     setSearchValue([{ label: val, value: val }])
 
     prefix.value = ''
@@ -236,6 +237,14 @@ function handleInputBlur() {
   if (noClosePopover.value) return
   active.value = false
   popoverShow.value = false
+}
+
+function delFilterFirstItem() {
+  if (!props.filterList.length) return
+  const item = props.filterList[0]
+  const type = item.type
+  const idx = searchValue.value.findIndex((v) => v.type === type)
+  idx > -1 && searchValue.value.splice(idx, 1)
 }
 
 function setSearchValue(options: LabelValue[], isDate?: boolean) {
@@ -320,7 +329,9 @@ async function handleSearch() {
 function handleClickSearch() {
   const val = inputValue.value.trim()
   if (val) {
+    // 直接输入点击搜索
     if (!popoverVisible.value && props.filterList.length && !activeFilterItem.value?.popover) {
+      delFilterFirstItem()
       setSearchValue([{ label: val, value: val }])
     }
     if (prefix.value) prefix.value = ''
