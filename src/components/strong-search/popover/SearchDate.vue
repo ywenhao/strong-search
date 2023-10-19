@@ -68,7 +68,7 @@ function startDisabledDateFn(value: Date) {
     const startDate = dayjs(value)
     return !startDate.isBefore(endDate) || props.starDisabledDate?.(value)
   }
-  return props.endDisabledDate?.(value)
+  return props.starDisabledDate?.(value)
 }
 
 function endDisabledDateFn(value: Date) {
