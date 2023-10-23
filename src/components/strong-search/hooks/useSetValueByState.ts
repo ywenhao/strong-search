@@ -4,6 +4,7 @@ import type { FilterItem, LabelValue, PopoverOption, SearchValue } from '../type
 
 /**
  * 设置searchValue
+ * 应用场景: table filter 选择后相应添加，删除搜索条的tag，配置filterKeys（filterList的key）使用
  */
 export function useSetValueByState<T extends FilterItem[], S extends object>({
   filterList,
