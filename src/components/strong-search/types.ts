@@ -12,7 +12,7 @@ export type PopoverOption = {
   dateProps?: {
     startKey: string
     endKey: string
-    starDisabledDate?: Function
+    startDisabledDate?: Function
     endDisabledDate?: Function
   }
 }

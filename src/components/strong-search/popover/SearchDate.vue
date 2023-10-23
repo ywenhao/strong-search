@@ -40,7 +40,7 @@ import { ElDatePicker, ElButton, dayjs } from 'element-plus'
 import { ref } from 'vue'
 
 const props = defineProps<{
-  starDisabledDate?: Function
+  startDisabledDate?: Function
   endDisabledDate?: Function
 }>()
 
@@ -66,9 +66,9 @@ function startDisabledDateFn(value: Date) {
   if (end.value) {
     const endDate = dayjs.unix(end.value)
     const startDate = dayjs(value)
-    return !startDate.isBefore(endDate) || props.starDisabledDate?.(value)
+    return !startDate.isBefore(endDate) || props.startDisabledDate?.(value)
   }
-  return props.starDisabledDate?.(value)
+  return props.startDisabledDate?.(value)
 }
 
 function endDisabledDateFn(value: Date) {
