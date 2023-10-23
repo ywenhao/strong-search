@@ -51,7 +51,7 @@
           @ok="handleDateOk"
           @cancel="handleDateCancel"
           v-else-if="popoverType === 'date'"
-          :star-disabled-date="dateProps.startDisabledDate"
+          :start-disabled-date="dateProps.startDisabledDate"
           :end-disabled-date="dateProps.endDisabledDate"
         />
       </ElPopover>
