@@ -117,23 +117,20 @@ const searchValue = computed<SearchValue[]>({
 const filterOptions = computed(() =>
   props.filterList.filter((v) => {
     const val = inputValue.value.trim()
-    return (
-      !searchValue.value.some((item) => item.type === v.type) &&
-      (!val ? true : v.name.includes(val))
-    )
+    return !searchValue.value.some((item) => item.type === v.type) && (!val || v.name.includes(val))
   })
 )
 
 const selectOptions = computed(() => {
   const val = inputValue.value.trim()
   const list = activeFilterItem.value?.popoverOption?.select || []
-  return list.filter((v) => (val ? v.label.includes(val) : true))
+  return list.filter((v) => !val || v.label.includes(val))
 })
 
 const checkOptions = computed(() => {
   const val = inputValue.value.trim()
   const list = activeFilterItem.value?.popoverOption?.check || []
-  return list.filter((v) => (val ? v.label.includes(val) : true))
+  return list.filter((v) => !val || v.label.includes(val))
 })
 
 const dateProps = computed(
