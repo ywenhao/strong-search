@@ -240,9 +240,10 @@ function handleInputBlur() {
 }
 
 function delFilterFirstItem() {
-  if (!props.filterList.length) return
-  const item = props.filterList[0]
-  const type = item.type
+  const firstType = inputValue.value.trim() && !prefix.value ? props.filterList[0]?.type : null
+  const type = activeFilterItem.value?.type || firstType
+  if (!props.filterList.length || !type) return
+
   const idx = searchValue.value.findIndex((v) => v.type === type)
   idx > -1 && searchValue.value.splice(idx, 1)
 }
