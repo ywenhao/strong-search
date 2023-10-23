@@ -11,6 +11,8 @@ const searchValue = ref<SearchValue[]>([])
 
 function handleSearch(item: SearchValue[]) {
   console.log('SearchValue', item)
+  // 根据业务更改
+  // formatValue 函数 可只在StrongSearch组件内部handleSearch处定义一次
   console.log('formatValue', formatValue(item))
 }
 </script>
