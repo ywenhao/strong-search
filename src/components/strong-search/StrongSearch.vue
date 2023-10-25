@@ -59,7 +59,7 @@
           :end-disabled-date="dateProps.endDisabledDate"
         >
           <template #title>
-            <slot name="filterListTitle" />
+            <slot name="dateTitle" />
           </template>
         </SearchDate>
       </ElPopover>
