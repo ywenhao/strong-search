@@ -78,11 +78,17 @@ import FilterSvg from './icons/filter.svg'
 import SearchIcon from './icons/SearchIcon.vue'
 import SearchCloseIcon from './icons/SearchCloseIcon.vue'
 
-const props = defineProps<{
-  modelValue: SearchValue[]
-  filterList: FilterItem[]
-  placeholder?: string
-}>()
+const props = withDefaults(
+  defineProps<{
+    modelValue: SearchValue[]
+    filterList: FilterItem[]
+    placeholder?: string
+    isFilter?: boolean
+  }>(),
+  {
+    isFilter: true
+  }
+)
 
 const emit = defineEmits<{
   search: [value: SearchValue[]]
@@ -117,7 +123,11 @@ const searchValue = computed<SearchValue[]>({
 const filterOptions = computed(() =>
   props.filterList.filter((v) => {
     const val = inputValue.value.trim()
-    return !searchValue.value.some((item) => item.type === v.type) && (!val || v.name.includes(val))
+    if (props.isFilter)
+      return (
+        !searchValue.value.some((item) => item.type === v.type) && (!val || v.name.includes(val))
+      )
+    return !val || v.name.includes(val)
   })
 )
 
@@ -203,7 +213,7 @@ function handleInputKeyDown(e: KeyboardEvent | Event) {
     event.key === 'Enter' &&
     !activeFilterItem.value?.popover
   ) {
-    delFilterFirstItem()
+    autoDelFilterItem()
     setSearchValue([{ label: val, value: val }])
 
     prefix.value = ''
@@ -236,7 +246,7 @@ function handleInputBlur() {
   popoverShow.value = false
 }
 
-function delFilterFirstItem() {
+function autoDelFilterItem() {
   const firstType = inputValue.value.trim() && !prefix.value ? props.filterList[0]?.type : null
   const type = activeFilterItem.value?.type || firstType
   if (!props.filterList.length || !type) return
@@ -276,6 +286,7 @@ function handleFilterChange(item: FilterItem) {
 }
 
 function handleSelectChange(item: LabelValue) {
+  autoDelFilterItem()
   setSearchValue([item])
   prefix.value = ''
   inputValue.value = ''
@@ -285,6 +296,7 @@ function handleSelectChange(item: LabelValue) {
 
 function handleCheckOk(items: LabelValue[]) {
   noClosePopover.value = false
+  autoDelFilterItem()
   setSearchValue(items)
   prefix.value = ''
   inputValue.value = ''
@@ -301,6 +313,7 @@ function handleCheckCancel() {
 
 function handleDateOk(value: number[]) {
   noClosePopover.value = false
+  autoDelFilterItem()
   const val = value.map((v) => (v ? String(v) : ''))
   setSearchValue(
     val.map((v) => ({ label: v, value: v })),
@@ -329,7 +342,7 @@ function handleClickSearch() {
   if (val) {
     // 直接输入点击搜索
     if (!popoverVisible.value && props.filterList.length && !activeFilterItem.value?.popover) {
-      delFilterFirstItem()
+      autoDelFilterItem()
       setSearchValue([{ label: val, value: val }])
     }
     if (prefix.value) prefix.value = ''
