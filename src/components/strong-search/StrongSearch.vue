@@ -88,13 +88,14 @@ import SearchCloseIcon from './icons/SearchCloseIcon.vue'
 
 const props = withDefaults(
   defineProps<{
-    modelValue: SearchValue[]
+    modelValue?: SearchValue[]
     filterList: FilterItem[]
     placeholder?: string
     isFilter?: boolean
   }>(),
   {
-    isFilter: true
+    isFilter: true,
+    modelValue: () => []
   }
 )
 
@@ -127,10 +128,15 @@ const popoverType = computed<PopoverType | null>(() =>
   !prefix.value ? 'filterList' : activeFilterItem.value?.popover || null
 )
 const inputValue = ref('')
-const searchValue = computed<SearchValue[]>({
-  get: () => props.modelValue,
-  set: (val) => emit('update:modelValue', val)
-})
+const searchValue = ref<SearchValue[]>([...props.modelValue])
+
+watch(
+  () => props.modelValue,
+  () => {
+    searchValue.value = [...props.modelValue]
+  },
+  { deep: true }
+)
 
 // 搜索、过滤
 const filterOptions = computed(() =>
@@ -347,7 +353,8 @@ function handleDateCancel() {
 
 async function handleSearch() {
   await nextTick()
-  emit('search', searchValue.value)
+  emit('update:modelValue', [...searchValue.value])
+  emit('search', [...searchValue.value])
 }
 
 function handleClickSearch() {
