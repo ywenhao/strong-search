@@ -35,7 +35,11 @@
           v-if="filterOptions.length && popoverType === 'filterList'"
           @change="handleFilterChange"
           :options="filterOptions"
-        />
+        >
+          <template #title>
+            <slot name="filterListTitle" />
+          </template>
+        </FilterList>
         <SearchSelect
           @change="handleSelectChange"
           :options="selectOptions"
@@ -53,7 +57,11 @@
           v-else-if="popoverType === 'date'"
           :start-disabled-date="dateProps.startDisabledDate"
           :end-disabled-date="dateProps.endDisabledDate"
-        />
+        >
+          <template #title>
+            <slot name="filterListTitle" />
+          </template>
+        </SearchDate>
       </ElPopover>
     </ElScrollbar>
   </div>
@@ -93,6 +101,11 @@ const props = withDefaults(
 const emit = defineEmits<{
   search: [value: SearchValue[]]
   'update:modelValue': [value: SearchValue[]]
+}>()
+
+defineSlots<{
+  filterListTitle(): any
+  dateTitle(): any
 }>()
 
 const searchRef = ref<HTMLDivElement>()

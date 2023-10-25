@@ -1,6 +1,6 @@
 <template>
   <div class="filter-list">
-    <div class="filter-title">请选择筛选条件</div>
+    <slot name="title"><div class="filter-title">请选择筛选条件</div></slot>
     <div class="filter-content">
       <div
         v-for="item in options"
@@ -28,6 +28,10 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   change: [value: FilterItem]
+}>()
+
+defineSlots<{
+  title(): any
 }>()
 
 const active = ref<FilterItem>()

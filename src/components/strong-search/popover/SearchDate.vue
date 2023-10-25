@@ -1,6 +1,6 @@
 <template>
   <div class="search-date">
-    <div class="date-title">请至少选择一个日期</div>
+    <slot name="title"><div class="date-title">请至少选择一个日期</div></slot>
     <div class="date-content">
       <div class="date-start">
         <div class="tip-title">开始日期</div>
@@ -17,9 +17,10 @@
         <div class="tip-title">结束日期</div>
         <ElDatePicker
           clearable
-          value-format="X"
-          v-model="end"
           type="date"
+          value-format="X"
+          :model-value="end"
+          @update:model-value="onUpdateEnd"
           :disabled-date="endDisabledDateFn"
           placeholder="请选择日期"
         />
@@ -32,7 +33,6 @@
       >
     </div>
   </div>
-  <slot />
 </template>
 
 <script setup lang="ts">
@@ -47,6 +47,10 @@ const props = defineProps<{
 const emit = defineEmits<{
   ok: [value: number[]]
   cancel: []
+}>()
+
+defineSlots<{
+  title(): any
 }>()
 
 const start = ref()
@@ -66,7 +70,7 @@ function startDisabledDateFn(value: Date) {
   if (end.value) {
     const endDate = dayjs.unix(end.value)
     const startDate = dayjs(value)
-    return !startDate.isBefore(endDate) || props.startDisabledDate?.(value)
+    return !startDate.isBefore(endDate.add(1, 'day')) || props.startDisabledDate?.(value)
   }
   return props.startDisabledDate?.(value)
 }
@@ -75,9 +79,13 @@ function endDisabledDateFn(value: Date) {
   if (start.value) {
     const startDate = dayjs.unix(start.value)
     const endDate = dayjs(value)
-    return !endDate.isAfter(startDate) || props.endDisabledDate?.(value)
+    return !endDate.isAfter(startDate.subtract(1, 'day')) || props.endDisabledDate?.(value)
   }
   return props.endDisabledDate?.(value)
+}
+
+function onUpdateEnd(val: string) {
+  end.value = !val ? val : String(+val + 86399)
 }
 
 function handleOk() {
