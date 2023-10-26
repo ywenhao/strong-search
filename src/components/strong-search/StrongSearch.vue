@@ -4,7 +4,7 @@
       <img :src="FilterSvg" alt="" />
     </i>
     <ElScrollbar ref="scrollbarRef" class="search-scrollbar">
-      <TagGroup @delete="handleSearch" v-model="searchValue" @tag-click="popoverShow = false" />
+      <TagGroup @delete="handleSearch" v-model="searchValue" @tag-click="handleActiveHide" />
       <ElPopover
         :width="180"
         :teleported="false"
@@ -191,10 +191,14 @@ function handleClear() {
   inputValue.value = ''
   prefix.value = ''
   searchValue.value = []
-  handleInputFocus()
-  popoverShow.value = false
-
+  handleActiveHide()
   handleSearch()
+}
+
+function handleActiveHide() {
+  active.value = true
+  inputRef.value?.focus()
+  popoverShow.value = false
 }
 
 function popoverNextTick() {
@@ -247,6 +251,12 @@ function handleInputFocus() {
 
 const noClosePopover = ref(false)
 
+function handleInputBlur() {
+  if (noClosePopover.value) return
+  active.value = false
+  popoverShow.value = false
+}
+
 watchEffect(() => {
   // 点击弹窗，不主动关闭
   const noCloseTypes: PopoverType[] = ['date', 'check']
@@ -254,12 +264,6 @@ watchEffect(() => {
     noClosePopover.value = true
   }
 })
-
-function handleInputBlur() {
-  if (noClosePopover.value) return
-  active.value = false
-  popoverShow.value = false
-}
 
 function autoDelFilterItem() {
   const firstType = inputValue.value.trim() && !prefix.value ? props.filterList[0]?.type : null
@@ -304,9 +308,8 @@ function handleSelectChange(item: LabelValue) {
   setSearchValue([item])
   prefix.value = ''
   inputValue.value = ''
+  handleActiveHide()
   handleSearch()
-  handleInputFocus()
-  popoverShow.value = false
 }
 
 function handleCheckOk(items: LabelValue[]) {
@@ -315,17 +318,15 @@ function handleCheckOk(items: LabelValue[]) {
   setSearchValue(items)
   prefix.value = ''
   inputValue.value = ''
+  handleActiveHide()
   handleSearch()
-  handleInputFocus()
-  popoverShow.value = false
 }
 
 function handleCheckCancel() {
   noClosePopover.value = false
   prefix.value = ''
   inputValue.value = ''
-  handleInputFocus()
-  popoverShow.value = false
+  handleActiveHide()
 }
 
 function handleDateOk(value: number[]) {
@@ -338,17 +339,15 @@ function handleDateOk(value: number[]) {
   )
   prefix.value = ''
   inputValue.value = ''
-  handleInputFocus()
+  handleActiveHide()
   handleSearch()
-  popoverShow.value = false
 }
 
 function handleDateCancel() {
   noClosePopover.value = false
   prefix.value = ''
   inputValue.value = ''
-  handleInputFocus()
-  popoverShow.value = false
+  handleActiveHide()
 }
 
 async function handleSearch() {
@@ -370,8 +369,7 @@ function handleClickSearch() {
   }
 
   handleSearch()
-  handleInputFocus()
-  popoverShow.value = false
+  handleActiveHide()
 }
 
 onMounted(() => {
