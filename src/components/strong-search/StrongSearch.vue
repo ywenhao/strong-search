@@ -19,14 +19,15 @@
             class="search-input"
             :maxlength="maxLength"
             :placeholder="placeholder"
+            @click="handleInputFocus"
             @focus="handleInputFocus"
             @blur="handleInputBlur"
             @keydown="handleInputKeyDown"
           >
             <template #prefix v-if="prefix">{{ prefix }}:</template>
             <template #suffix>
-              <SearchCloseIcon class="e-icon" v-if="closeBtnVisible" @click="handleClear" />
-              <SearchIcon class="e-icon" @click="handleClickSearch" />
+              <SearchCloseIcon class="e-icon" v-if="closeBtnVisible" @click.stop="handleClear" />
+              <SearchIcon class="e-icon" @click.stop="handleClickSearch" />
             </template>
           </ElInput>
         </template>
@@ -186,11 +187,11 @@ const popoverVisible = computed(() => {
 })
 
 // 空值显示列表
-watch(inputValue, (val) => {
-  if (!val.trim() && !prefix.value && filterOptions.value.length) {
-    popoverShow.value = true
-  }
-})
+// watch(inputValue, (val) => {
+//   if (!val.trim() && !prefix.value && filterOptions.value.length) {
+//     popoverShow.value = true
+//   }
+// })
 
 function handleClear() {
   inputValue.value = ''
@@ -217,7 +218,7 @@ function handleInputKeyDown(e: KeyboardEvent | Event) {
     } else if (searchValue.value.length) {
       searchValue.value.splice(searchValue.value.length - 1, 1)
       // fix popover 位置
-      popoverVisible.value && popoverNextTick()
+      // popoverVisible.value && popoverNextTick()
 
       handleSearch()
     }
@@ -237,6 +238,8 @@ function handleInputKeyDown(e: KeyboardEvent | Event) {
 
     prefix.value = ''
     inputValue.value = ''
+
+    popoverShow.value = false
 
     handleSearch()
 
@@ -310,7 +313,8 @@ function handleSelectChange(item: LabelValue) {
   prefix.value = ''
   inputValue.value = ''
   handleSearch()
-  popoverNextTick()
+  popoverShow.value = false
+  // popoverNextTick()
 }
 
 function handleCheckOk(items: LabelValue[]) {
@@ -320,14 +324,16 @@ function handleCheckOk(items: LabelValue[]) {
   prefix.value = ''
   inputValue.value = ''
   handleSearch()
-  popoverNextTick()
+  popoverShow.value = false
+  // popoverNextTick()
 }
 
 function handleCheckCancel() {
   noClosePopover.value = false
   prefix.value = ''
   inputValue.value = ''
-  popoverNextTick()
+  popoverShow.value = false
+  // popoverNextTick()
 }
 
 function handleDateOk(value: number[]) {
@@ -341,14 +347,16 @@ function handleDateOk(value: number[]) {
   prefix.value = ''
   inputValue.value = ''
   handleSearch()
-  popoverNextTick()
+  popoverShow.value = false
+  // popoverNextTick()
 }
 
 function handleDateCancel() {
   noClosePopover.value = false
   prefix.value = ''
   inputValue.value = ''
-  popoverNextTick()
+  popoverShow.value = false
+  // popoverNextTick()
 }
 
 async function handleSearch() {
@@ -367,6 +375,8 @@ function handleClickSearch() {
     }
     if (prefix.value) prefix.value = ''
     inputValue.value = ''
+
+    popoverShow.value = false
   }
   handleSearch()
 }
