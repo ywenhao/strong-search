@@ -138,6 +138,8 @@ watch(
   { deep: true }
 )
 
+watch(searchValue, setScrollBottom, { flush: 'post' })
+
 // 搜索、过滤
 const filterOptions = computed(() =>
   props.filterList.filter((v) => {
@@ -239,8 +241,6 @@ function handleInputKeyDown(e: KeyboardEvent | Event) {
     inputValue.value = ''
 
     handleSearch()
-
-    nextTick(() => setScrollBottom())
   }
 }
 
