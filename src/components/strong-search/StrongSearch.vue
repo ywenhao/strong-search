@@ -294,11 +294,8 @@ function setScrollBottom() {
 function handleFilterChange(item: FilterItem) {
   inputValue.value = ''
   prefix.value = item.name
-  if (!popoverType.value) {
-    popoverShow.value = false
-    inputRef.value?.focus()
-  } else popoverNextTick()
   handleInputFocus()
+  popoverType.value && popoverNextTick()
 }
 
 function handleSelectChange(item: LabelValue) {
