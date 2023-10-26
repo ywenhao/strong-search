@@ -186,13 +186,6 @@ const popoverVisible = computed(() => {
   return true
 })
 
-// 空值显示列表
-// watch(inputValue, (val) => {
-//   if (!val.trim() && !prefix.value && filterOptions.value.length) {
-//     popoverShow.value = true
-//   }
-// })
-
 function handleClear() {
   inputValue.value = ''
   prefix.value = ''
@@ -217,8 +210,6 @@ function handleInputKeyDown(e: KeyboardEvent | Event) {
       prefix.value = ''
     } else if (searchValue.value.length) {
       searchValue.value.splice(searchValue.value.length - 1, 1)
-      // fix popover 位置
-      // popoverVisible.value && popoverNextTick()
       popoverShow.value = false
 
       handleSearch()
@@ -315,7 +306,7 @@ function handleSelectChange(item: LabelValue) {
   inputValue.value = ''
   handleSearch()
   popoverShow.value = false
-  // popoverNextTick()
+  
 }
 
 function handleCheckOk(items: LabelValue[]) {
@@ -326,7 +317,7 @@ function handleCheckOk(items: LabelValue[]) {
   inputValue.value = ''
   handleSearch()
   popoverShow.value = false
-  // popoverNextTick()
+  
 }
 
 function handleCheckCancel() {
@@ -334,7 +325,7 @@ function handleCheckCancel() {
   prefix.value = ''
   inputValue.value = ''
   popoverShow.value = false
-  // popoverNextTick()
+  
 }
 
 function handleDateOk(value: number[]) {
@@ -349,7 +340,7 @@ function handleDateOk(value: number[]) {
   inputValue.value = ''
   handleSearch()
   popoverShow.value = false
-  // popoverNextTick()
+  
 }
 
 function handleDateCancel() {
@@ -357,7 +348,7 @@ function handleDateCancel() {
   prefix.value = ''
   inputValue.value = ''
   popoverShow.value = false
-  // popoverNextTick()
+  
 }
 
 async function handleSearch() {
