@@ -295,7 +295,8 @@ function handleFilterChange(item: FilterItem) {
   inputValue.value = ''
   prefix.value = item.name
   handleInputFocus()
-  popoverType.value && popoverNextTick()
+  if (popoverType.value) popoverNextTick()
+  else popoverShow.value = false
 }
 
 function handleSelectChange(item: LabelValue) {
