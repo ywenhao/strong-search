@@ -219,6 +219,7 @@ function handleInputKeyDown(e: KeyboardEvent | Event) {
       searchValue.value.splice(searchValue.value.length - 1, 1)
       // fix popover 位置
       // popoverVisible.value && popoverNextTick()
+      popoverShow.value = false
 
       handleSearch()
     }
