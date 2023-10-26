@@ -1,6 +1,6 @@
 <template>
   <div ref="searchRef" class="strong-search" :class="{ active }">
-    <i class="filter-icon">
+    <i class="filter-icon" @click="handleInputFocus">
       <img :src="FilterSvg" alt="" />
     </i>
     <ElScrollbar ref="scrollbarRef" class="search-scrollbar">
@@ -20,7 +20,6 @@
             :maxlength="maxLength"
             :placeholder="placeholder"
             @click="handleInputFocus"
-            @focus="handleInputFocus"
             @blur="handleInputBlur"
             @keydown="handleInputKeyDown"
           >
@@ -139,6 +138,8 @@ watch(
   { deep: true }
 )
 
+watch(searchValue, setScrollBottom, { flush: 'post' })
+
 // 搜索、过滤
 const filterOptions = computed(() =>
   props.filterList.filter((v) => {
@@ -190,6 +191,7 @@ function handleClear() {
   inputValue.value = ''
   prefix.value = ''
   searchValue.value = []
+  handleInputFocus()
   popoverShow.value = false
 
   handleSearch()
@@ -234,14 +236,13 @@ function handleInputKeyDown(e: KeyboardEvent | Event) {
     popoverShow.value = false
 
     handleSearch()
-
-    nextTick(() => setScrollBottom())
   }
 }
 
 function handleInputFocus() {
   active.value = true
   popoverShow.value = true
+  inputRef.value?.focus()
 }
 
 const noClosePopover = ref(false)
@@ -297,6 +298,7 @@ function handleFilterChange(item: FilterItem) {
     popoverShow.value = false
     inputRef.value?.focus()
   } else popoverNextTick()
+  handleInputFocus()
 }
 
 function handleSelectChange(item: LabelValue) {
@@ -305,8 +307,8 @@ function handleSelectChange(item: LabelValue) {
   prefix.value = ''
   inputValue.value = ''
   handleSearch()
+  handleInputFocus()
   popoverShow.value = false
-  
 }
 
 function handleCheckOk(items: LabelValue[]) {
@@ -316,16 +318,16 @@ function handleCheckOk(items: LabelValue[]) {
   prefix.value = ''
   inputValue.value = ''
   handleSearch()
+  handleInputFocus()
   popoverShow.value = false
-  
 }
 
 function handleCheckCancel() {
   noClosePopover.value = false
   prefix.value = ''
   inputValue.value = ''
+  handleInputFocus()
   popoverShow.value = false
-  
 }
 
 function handleDateOk(value: number[]) {
@@ -338,17 +340,17 @@ function handleDateOk(value: number[]) {
   )
   prefix.value = ''
   inputValue.value = ''
+  handleInputFocus()
   handleSearch()
   popoverShow.value = false
-  
 }
 
 function handleDateCancel() {
   noClosePopover.value = false
   prefix.value = ''
   inputValue.value = ''
+  handleInputFocus()
   popoverShow.value = false
-  
 }
 
 async function handleSearch() {
@@ -367,10 +369,11 @@ function handleClickSearch() {
     }
     if (prefix.value) prefix.value = ''
     inputValue.value = ''
-
-    popoverShow.value = false
   }
+
   handleSearch()
+  handleInputFocus()
+  popoverShow.value = false
 }
 
 onMounted(() => {
