@@ -138,7 +138,14 @@ watch(
   { deep: true }
 )
 
-watch(searchValue, setScrollBottom, { flush: 'post' })
+// 新增的才滚动
+watch(
+  searchValue,
+  (val, oldVal) => {
+    val.length > oldVal.length && setScrollBottom()
+  },
+  { flush: 'post' }
+)
 
 // 搜索、过滤
 const filterOptions = computed(() =>
