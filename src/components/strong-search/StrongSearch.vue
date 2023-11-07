@@ -395,7 +395,7 @@ onMounted(() => {
 
 provide(
   'is-active',
-  computed(() => active.value && popoverShow.value)
+  computed(() => active.value && popoverVisible.value)
 )
 </script>
 
