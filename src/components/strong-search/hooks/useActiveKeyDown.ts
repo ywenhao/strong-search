@@ -1,4 +1,4 @@
-import { computed, toRaw, type Ref, watchPostEffect } from 'vue'
+import { computed, toRaw, type Ref, watchPostEffect, inject, type ComputedRef } from 'vue'
 
 /**
  * 简化active 按键操作
@@ -14,18 +14,18 @@ export function useActiveKeyDown<
   K extends keyof P,
   EnterFn extends (value: P) => void
 >({
-  isActive,
   active,
   options,
   enterFn,
   activeKey
 }: {
-  isActive: Ref<boolean>
   active: Ref<T>
   options: Ref<P[]>
   enterFn?: EnterFn
   activeKey?: K
 }) {
+  const isActive = inject('is-active') as ComputedRef<boolean>
+
   const getActive = (item: P) => (activeKey ? item[activeKey] : toRaw(item)) as T
 
   const activeItem = computed(() => {

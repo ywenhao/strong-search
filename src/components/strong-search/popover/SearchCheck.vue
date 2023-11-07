@@ -26,10 +26,9 @@ import { useActiveKeyDown } from '../hooks/useActiveKeyDown'
 import type { LabelValue } from '../types'
 import { ElButton } from 'element-plus'
 import CheckSvg from '../icons/check.svg'
-import { computed, ref, toRef, watchEffect } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 
 const props = defineProps<{
-  isActive: boolean
   options: LabelValue[]
 }>()
 
@@ -75,7 +74,6 @@ function onClear() {
 useActiveKeyDown({
   active,
   options: actives,
-  isActive: toRef(() => props.isActive),
   enterFn: () => {
     if (!props.options.length || !active.value) return
     handleClick(active.value)

@@ -32,7 +32,6 @@
         </template>
 
         <FilterList
-          :is-active="active && popoverVisible"
           v-if="filterOptions.length && popoverType === 'filterList'"
           @change="handleFilterChange"
           :options="filterOptions"
@@ -42,13 +41,11 @@
           </template>
         </FilterList>
         <SearchSelect
-          :is-active="active && popoverVisible"
           @change="handleSelectChange"
           :options="selectOptions"
           v-else-if="popoverType === 'select'"
         />
         <SearchCheck
-          :is-active="active && popoverVisible"
           @ok="handleCheckOk"
           @cancel="handleCheckCancel"
           :options="checkOptions"
@@ -71,7 +68,17 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch, watchEffect, type ComputedRef } from 'vue'
+import {
+  computed,
+  nextTick,
+  onMounted,
+  ref,
+  watch,
+  watchEffect,
+  type ComputedRef,
+  provide
+} from 'vue'
+import type { FilterItem, LabelValue, PopoverOption, PopoverType, SearchValue } from './types'
 import {
   ElScrollbar,
   ElInput,
@@ -81,7 +88,6 @@ import {
 } from 'element-plus'
 import TagGroup from './tag/TagGroup.vue'
 import FilterList from './popover/FilterList.vue'
-import type { FilterItem, LabelValue, PopoverOption, PopoverType, SearchValue } from './types'
 import SearchSelect from './popover/SearchSelect.vue'
 import SearchCheck from './popover/SearchCheck.vue'
 import SearchDate from './popover/SearchDate.vue'
@@ -386,6 +392,11 @@ onMounted(() => {
     console.error('props配置 `filterList` 长度不能为 0')
   }
 })
+
+provide(
+  'is-active',
+  computed(() => active.value && popoverShow.value)
+)
 </script>
 
 <style lang="scss">
