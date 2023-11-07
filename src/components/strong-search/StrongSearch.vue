@@ -32,6 +32,7 @@
         </template>
 
         <FilterList
+          :is-active="active"
           v-if="filterOptions.length && popoverType === 'filterList'"
           @change="handleFilterChange"
           :options="filterOptions"
@@ -41,11 +42,13 @@
           </template>
         </FilterList>
         <SearchSelect
+          :is-active="active"
           @change="handleSelectChange"
           :options="selectOptions"
           v-else-if="popoverType === 'select'"
         />
         <SearchCheck
+          :is-active="active"
           @ok="handleCheckOk"
           @cancel="handleCheckCancel"
           :options="checkOptions"

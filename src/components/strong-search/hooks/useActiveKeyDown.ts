@@ -1,4 +1,4 @@
-import { computed, toRaw, type Ref, onMounted, onBeforeUnmount } from 'vue'
+import { computed, toRaw, type Ref, watchPostEffect } from 'vue'
 
 /**
  * 简化active 按键操作
@@ -13,7 +13,19 @@ export function useActiveKeyDown<
   T extends P[K] | P | undefined,
   K extends keyof P,
   EnterFn extends (value: P) => void
->(active: Ref<T>, options: Ref<P[]>, enterFn?: EnterFn, activeKey?: K) {
+>({
+  isActive,
+  active,
+  options,
+  enterFn,
+  activeKey
+}: {
+  isActive: Ref<boolean>
+  active: Ref<T>
+  options: Ref<P[]>
+  enterFn?: EnterFn
+  activeKey?: K
+}) {
   const getActive = (item: P) => (activeKey ? item[activeKey] : toRaw(item)) as T
 
   const activeItem = computed(() => {
@@ -52,17 +64,20 @@ export function useActiveKeyDown<
   }
 
   function onKeyDown(e: KeyboardEvent) {
+    if (!isActive.value) return
     e.key === 'ArrowUp' && activeUp()
     e.key === 'ArrowDown' && activeDown()
     e.key === 'Enter' && activeEnter()
   }
 
-  onMounted(() => {
-    window.addEventListener('keydown', onKeyDown, true)
-  })
+  watchPostEffect((cleanup) => {
+    isActive.value
+      ? window.addEventListener('keydown', onKeyDown)
+      : window.removeEventListener('keydown', onKeyDown)
 
-  onBeforeUnmount(() => {
-    window.removeEventListener('keydown', onKeyDown, true)
+    cleanup(() => {
+      window.removeEventListener('keydown', onKeyDown)
+    })
   })
 
   return { activeUp, activeDown, activeEnter, activeItem }

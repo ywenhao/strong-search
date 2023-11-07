@@ -23,6 +23,7 @@ import type { FilterItem } from '../types'
 import { ref, toRef, watchEffect } from 'vue'
 
 const props = defineProps<{
+  isActive: boolean
   options: FilterItem[]
 }>()
 
@@ -36,11 +37,12 @@ defineSlots<{
 
 const active = ref<FilterItem>()
 
-useActiveKeyDown(
+useActiveKeyDown({
   active,
-  toRef(() => props.options),
-  (item) => emit('change', item)
-)
+  isActive: toRef(() => props.isActive),
+  options: toRef(() => props.options),
+  enterFn: (item) => emit('change', item)
+})
 
 watchEffect(() => {
   active.value = props.options[0]
