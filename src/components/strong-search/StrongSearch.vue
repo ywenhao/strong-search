@@ -25,8 +25,8 @@
           >
             <template #prefix v-if="prefix">{{ prefix }}:</template>
             <template #suffix>
-              <SearchCloseIcon class="e-icon" v-if="closeBtnVisible" @click="handleClear" />
-              <SearchIcon class="e-icon" @click="handleClickSearch" />
+              <SearchCloseIcon class="e-icon" v-if="closeBtnVisible" @click.stop="handleClear" />
+              <SearchIcon class="e-icon" @click.stop="handleClickSearch" />
             </template>
           </ElInput>
         </template>
